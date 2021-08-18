@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Pagina de registro de usuarios</title>
+    </head>
+    <body>
+        <div id="title-register">
+            <h1>Registro de usuarios</h1>
+        </div>
+        <div>
+            <form id="form-div-register" name="registerForm" method="POST" action="/MyServlet">
+                <table>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td><input id="txt-name-form" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>DNI:</td>
+                        <td><input id="txt-dni-form" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Piso:</td>
+                        <td><input id="txt-door-form" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Contrase&nacute;a:</td>
+                        <td><input id="txt-psw-form" type="text"></td>
+                    </tr>
+                </table>
+                <p/>
+                <input type="submit" value="Registrar">
+            </form>
+        </div>
+    </body>
+</html>

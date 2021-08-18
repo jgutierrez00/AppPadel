@@ -1,3 +1,4 @@
+package AppReservas;
 public class Hora implements Comparable<Hora>{
 
     private Integer h;

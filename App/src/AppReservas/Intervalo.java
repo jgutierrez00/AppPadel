@@ -1,3 +1,4 @@
+package AppReservas;
 public class Intervalo implements Comparable<Intervalo>{
     private Hora h1;
     private Hora h2;

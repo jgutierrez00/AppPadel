@@ -1,3 +1,4 @@
+package AppReservas;
 public class AppException extends RuntimeException{
     
     public AppException(){
