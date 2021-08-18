@@ -1,12 +1,12 @@
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.TreeMap;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Reservas{
     private Map<String, Intervalo> m;
-    private List<Intervalo> horas;
+    private Set<Intervalo> horas;
 
     /*
     *   Faltan horas. Al parecer hay juegos de hora y cuarto. Sobran media hora justo antes de las horas finales.
@@ -14,7 +14,7 @@ public class Reservas{
 
     public Reservas(){
         m = new TreeMap<>();
-        horas = new LinkedList<>();
+        horas = new TreeSet<>();
         horas.add(new Intervalo(new Hora(10), new Hora(11,30)));
         horas.add(new Intervalo(new Hora(11,30), new Hora(13)));
         horas.add(new Intervalo(new Hora(13), new Hora(14,30)));
@@ -24,7 +24,7 @@ public class Reservas{
 
     }
 
-    public void addReserva(Intervalo i, String dni){
+    public String addReserva(Intervalo i, String dni){
         checkIntervaloHora(i);
         checkIntervaloMinutos(i);
         if(checkReservaPorDni(dni)){
@@ -36,6 +36,7 @@ public class Reservas{
         m.put(dni, i);
         horas.remove(i);
 
+        return "Hora reservada con exito";
     }
 
     public boolean checkReservaPorDni(String dni){
@@ -48,6 +49,17 @@ public class Reservas{
         }else{
             return false;
         }
+    }
+
+    public String eliminarReserva(String dni){
+        if(checkReservaPorDni(dni)){
+            Intervalo i = m.get(dni);
+            m.remove(dni);
+            horas.add(i);
+            return "Hora reservada eliminada con exito";
+        }
+        return "Usted no ha reservado ninguna hora";
+
     }
 
     public String getHoras(){

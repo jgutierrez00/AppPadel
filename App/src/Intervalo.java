@@ -1,4 +1,4 @@
-public class Intervalo {
+public class Intervalo implements Comparable<Intervalo>{
     private Hora h1;
     private Hora h2;
 
@@ -42,5 +42,17 @@ public class Intervalo {
     @Override
     public String toString(){
         return "["+h1.toString()+","+h2.toString()+"]";
+    }
+
+    @Override
+    public int compareTo(Intervalo i){
+        if(h1.compareTo(i.h1) > 0){
+            return 1;
+        }else if(h1.compareTo(i.h1) < 0){
+            return -1;
+        }else{
+            return 0;
+        }
+
     }
 }
