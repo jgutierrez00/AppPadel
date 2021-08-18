@@ -61,7 +61,7 @@ public class Reservas{
     @Override
     public String toString(){
         String s = "Reservas: ";
-        StringJoiner sj = new StringJoiner(",\n", "[", "]");
+        StringJoiner sj = new StringJoiner(",\n           ", "[", "]");
 
         for(String i : m.keySet()){
             sj.add(i+", "+m.get(i).toString());
