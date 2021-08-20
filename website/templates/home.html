@@ -6,12 +6,13 @@
     <ul class="list-group">
         <form method="POST">
             {% for item in horas %}
-            {% if item[1] == 'Libre' %}
-                <button type="submit" id="btn" value="gola" name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</li>
-            {% else %}
-                <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
-            {% endif %}
-        {% endfor %}
+                {% set idx = horas.index(item) %}
+                {% if item[1] == 'Libre' %}
+                    <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</li>
+                {% else %}
+                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                {% endif %}
+            {% endfor %}
         </form>
     </ul>
     <br/>
