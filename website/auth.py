@@ -18,12 +18,22 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         nombre = request.form.get('nombre')
+        apellido1 = request.form.get('apellido1')
+        apellido2 = request.form.get('apellido2')
         dni = request.form.get('dni')
         piso = request.form.get('piso')
         password1 = request.form.get('psw1')
         password2 = request.form.get('psw2')
-        if nombre == "":
-            flash('El campo "nombre" no puede estar vacio', category='error')
+        if nombre == "" or nombre is None:
+            flash('El campo \'Nombre\' no puede estar vacio', category='error')
+        elif dni == "" or dni is None:
+            flash('El campo \'DNI\' no puede estar vacio', category='error')
+        elif apellido1 == "" or apellido1 is None:
+            flash('El campo \'Primer apellido\' no puede estar vacio', category='error')
+        elif password1 == "" or password1 is None:
+            flash('El campo \'Contraseña\' no puede estar vacio', category='error')
+        elif password2 == "" or password2 is None:
+            flash('El campo \'Confirmar contraseña\' no puede estar vacio', category='error')
         elif len(dni) < 8:
             flash('El dni introducido no tiene la longitud correcta', category='error')
         elif checkDni(dni[0:len(dni)-1]) == False:
