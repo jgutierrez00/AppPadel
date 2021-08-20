@@ -1,0 +1,5 @@
+Tasks:
+    ☐ Arreglar AttributeError: 'NoneType' object has no attribute 'is_active'
+    ☐ Crear en python el algoritmo de reservas
+    ☐ Obtener IPs en registro
+

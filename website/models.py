@@ -16,5 +16,6 @@ class User(db.Model, UserMixin):
     apellido1 = db.Column(db.String(128))
     apellido2 = db.Column(db.String(128))
     dni = db.Column(db.String(10), unique=True)
-    contraseña = db.Column(db.String(128))
+    piso = db.Column(db.String(128))
+    contrasenya = db.Column(db.String(128))
     information = db.relationship('Information')

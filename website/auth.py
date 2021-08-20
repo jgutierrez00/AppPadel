@@ -1,17 +1,35 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import User
+from . import db
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.form
-    return render_template("login.html")
+    if request.method == 'POST':
+        dni = request.form.get('dni')
+        psw = request.form.get('psw')
+        user = User.query.filter_by(dni=dni).first()
+        if user:
+            if check_password_hash(user.contrasenya, psw):
+                flash('Sesion iniciada con exito', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('DNI o contraseña incorrectos', category='error')
+        else:
+            flash('El dni introducido no se encuentra registrado', category='error')
+        
+    return render_template("login.html", user=current_user)
 
-
-@auth.route('/logout', methods=['GET', 'POST'])
+@auth.route('/logout')
+@login_required
 def logout():
-    return "<p>logout</p>"
+    logout_user()
+    return redirect(url_for('auth.login'))
 
 
 @auth.route('/sign_up', methods=['GET', 'POST'])
@@ -24,29 +42,46 @@ def sign_up():
         piso = request.form.get('piso')
         password1 = request.form.get('psw1')
         password2 = request.form.get('psw2')
-        if nombre == "" or nombre is None:
-            flash('El campo \'Nombre\' no puede estar vacio', category='error')
-        elif dni == "" or dni is None:
-            flash('El campo \'DNI\' no puede estar vacio', category='error')
-        elif apellido1 == "" or apellido1 is None:
-            flash('El campo \'Primer apellido\' no puede estar vacio', category='error')
-        elif password1 == "" or password1 is None:
-            flash('El campo \'Contraseña\' no puede estar vacio', category='error')
-        elif password2 == "" or password2 is None:
-            flash('El campo \'Confirmar contraseña\' no puede estar vacio', category='error')
-        elif len(dni) < 8:
-            flash('El dni introducido no tiene la longitud correcta', category='error')
-        elif checkDni(dni[0:len(dni)-1]) == False:
-            flash('El dni introducido no pasa la comprobacion del digito de control', category='error')
-        elif len(password1) < 7:
-            flash('La contraseña tiene que tener 7 caracteres como minimo', category='error')
-        elif password1 != password2:
-            flash('Las contraseñas deben coincidir', category='error')
-        else:
-            flash('Usuario creado', category='success')
         
+        user = User.query.filter_by(dni=dni).first()
 
-    return render_template("sign_up.html")
+        if user:
+            flash('El dni introducido ya esta registrado', category='error')
+        else:
+            if nombre == "" or nombre is None:
+                flash('El campo \'Nombre\' no puede estar vacio', category='error')
+            elif dni == "" or dni is None:
+                flash('El campo \'DNI\' no puede estar vacio', category='error')
+            elif apellido1 == "" or apellido1 is None:
+                flash('El campo \'Primer apellido\' no puede estar vacio', category='error')
+            elif password1 == "" or password1 is None:
+                flash('El campo \'Contraseña\' no puede estar vacio', category='error')
+            elif password2 == "" or password2 is None:
+                flash('El campo \'Confirmar contraseña\' no puede estar vacio', category='error')
+            elif len(dni) < 8:
+                flash('El dni introducido no tiene la longitud correcta', category='error')
+            elif checkDni(dni[0:len(dni)-1]) == False:
+                flash('El dni introducido no pasa la comprobacion del digito de control', category='error')
+            elif len(password1) < 7:
+                flash('La contraseña tiene que tener 7 caracteres como minimo', category='error')
+            elif password1 != password2:
+                flash('Las contraseñas deben coincidir', category='error')
+            else:
+                user = User.query.filter_by(nombre=nombre, apellido1=apellido1, apellido2=apellido2).first()
+                if user: 
+                    flash('Los datos personales introducidos ya estan registrados', category='error')
+                user = User.query.filter_by(piso=piso).first()
+                if user:
+                    flash('El piso introducido ya esta registrado', category='error')
+                new_user = User(nombre=nombre, apellido1=apellido1, apellido2=apellido2, dni=dni, piso=piso,
+                contrasenya=generate_password_hash(password1, method='sha256'))
+                db.session.add(new_user)
+                db.session.commit()
+                login_user(user, remember=True)
+                flash('Usuario creado', category='success')
+                return redirect(url_for('views.home'))
+        
+    return render_template("sign_up.html", user=current_user)
 
 
 def checkDni(dni):
