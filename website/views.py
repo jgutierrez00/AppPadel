@@ -1,5 +1,7 @@
+from website.models import User
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
+from . import db
 
 
 views = Blueprint('views', __name__)
@@ -9,6 +11,7 @@ horas = [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Li
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+
     if request.method == 'POST':
         if request.form.get('mbtn'):
             eliminarReserva(current_user.nombre)

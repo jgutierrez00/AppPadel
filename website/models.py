@@ -4,8 +4,6 @@ from sqlalchemy.sql import func
 
 class Information(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    horaReserva = db.Column(db.String(128), unique=True)
-    horaFinalizacion = db.Column(db.String(128), unique=True)
     ip = db.Column(db.String(128), unique=True)
     data = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

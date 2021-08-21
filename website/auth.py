@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import Information, User
 from . import db
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
@@ -15,6 +15,9 @@ def login():
         user = User.query.filter_by(dni=dni).first()
         if user:
             if check_password_hash(user.contrasenya, psw):
+                info = Information(ip=request.remote_addr, user_id=user.id)
+                db.session.add(info)
+                db.session.commit()
                 flash('Sesion iniciada con exito', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -78,6 +81,10 @@ def sign_up():
                 db.session.add(new_user)
                 db.session.commit()
                 login_user(user, remember=True)
+                id = User.query.filter_by(dni=dni).first()
+                info = Information(ip = request.remote_addr, user_id=str(id)[6:7])
+                db.session.add(info)
+                db.session.commit()
                 flash('Usuario creado', category='success')
                 return redirect(url_for('views.home'))
         
