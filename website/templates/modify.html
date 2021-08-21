@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    <h1 class="display-4" style="text-align: center;">Horarios disponibles para reserva</h1>
+    <form method="POST">
+        <ul class="list-group">
+            {% for item in horas %}
+                {% set idx = horas.index(item) %}
+                {% if item[1] == 'Libre' %}
+                    <button type="submit" id="mbtn" value={{idx}} name="mbtn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <br/>
+        <div class="d-flex justify-content-center">
+            <button type="submit" id="cbtn" value="cancel" name="cbtn" class="list-group-item list-group-item-secondary">Cancelar</button>
+        </div>
+    </form>
+{% endblock %}

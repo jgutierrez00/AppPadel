@@ -1,6 +1,6 @@
 Tasks:
     ✔ Arreglar AttributeError: 'NoneType' object has no attribute 'is_active' @done(21-08-20 19:34)
     ✔ Arreglar lista para que aparezcan hora y el que ha reservado @done(21-08-20 21:54)
-    ☐ Crear en python el algoritmo de reservas
+    ✔ Crear en python el algoritmo de reservas @done(21-08-21 12:04)
     ☐ Obtener IPs en registro
 

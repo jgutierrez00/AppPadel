@@ -3,21 +3,21 @@
 
 {% block content %}
     <h1 class="display-4" style="text-align: center;">Horarios disponibles para reserva</h1>
-    <ul class="list-group">
-        <form method="POST">
-            {% for item in horas %}
-                {% set idx = horas.index(item) %}
-                {% if item[1] == 'Libre' %}
-                    <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</li>
-                {% else %}
-                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
-                {% endif %}
-            {% endfor %}
-        </form>
-    </ul>
-    <br/>
-    <div class="d-flex justify-content-center">
-        <button type='button' id="deletebtn" class="btn btn-secondary btn-lg">Cancelar reserva</button>
-        <button type='button' id="modifybtn" style="margin-left: 100px;" class="btn btn-secondary btn-lg">Modificar reserva</button>
-    </div>
+    <form method="POST">
+        <ul class="list-group">
+                {% for item in horas %}
+                    {% set idx = horas.index(item) %}
+                    {% if item[1] == 'Libre' %}
+                        <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                    {% else %}
+                        <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                    {% endif %}
+                {% endfor %}
+        </ul>
+        <br/>
+        <div class="d-flex justify-content-center">
+            <button type="submit" id="deletebtn" name="deletebtn" value="db"  class="btn btn-secondary btn-lg">Cancelar reserva</button>
+            <button type="submit" id="modifybtn" name="modifybtn" value="mb" style="margin-left: 100px;" class="btn btn-secondary btn-lg">Modificar reserva</button>
+        </div>
+    </form>
 {% endblock %}
