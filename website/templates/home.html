@@ -6,7 +6,8 @@
     <form method="POST">
         <ul class="list-group">
             {% for item in dias %}
-                <button type="submit" id="btnday" value={{item[0]}} name="btnday" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}}</button>
+                {% set idx = dias.index(item) %}
+                <button type="submit" id="btnday" value={{idx}} name="btnday" class="list-group-item list-group-item list-group-item-action">{{item[0]}}</button>
             {% endfor %}
         </ul>
         <br/>

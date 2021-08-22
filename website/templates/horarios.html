@@ -13,12 +13,12 @@
             <div class="col-sm">
                 <form method="POST">
                     <ul class="list-group">
-                        {% for item in horasp1 %}
-                            {% set idx = horasp1.index(item)%}
+                        {% for item in dias1 %}
+                            {% set idx = dias1.index(item)%}
                             {% if item[1] == 'Libre' %}
-                                <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                                <button type="submit" id="btn1" value={{idx}} name="btn1" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
                             {% else %}
-                                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                                <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm">
                 <form method="POST" class="btn-group-vertical d-flex justify-content-center">
-                    <button type="submit" id="cbtn" name="cbtn" class="btn btn-secondary btn-lg">Cancelar reservas</button>
+                    <button type="submit" id="cbtn" name="cbtn1" class="btn btn-secondary btn-lg">Cancelar reservas</button>
                     <button type="submit" id="mbtn1" name="mbtn1" class="btn btn-secondary btn-lg">Modificar reserva pista 1</button>
                     <button type="submit" id="mbtn2" name="mbtn2" class="btn btn-secondary btn-lg">Modificar reserva pista 2</button>
                 </form>
@@ -34,12 +34,12 @@
             <div class="col-sm">
                 <form method="POST">
                     <ul class="list-group">
-                        {% for item in horasp2 %}
-                            {% set idx = horasp2.index(item)%}
+                        {% for item in dias2 %}
+                            {% set idx = dias2.index(item)%}
                             {% if item[1] == 'Libre' %}
-                                <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                                <button type="submit" id="btn2" value={{idx}} name="btn2" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
                             {% else %}
-                                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                                <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>

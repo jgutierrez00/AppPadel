@@ -6,6 +6,7 @@ Tasks:
     ✔ Comprobar que las ips son correctas y que funciona correctamente @done(21-08-22 12:21)
     ✔ Modificar para reserva de dos pistas (HTML) @done(21-08-22 13:51)
     ✔ Modificar para reserva durante toda la semana (HTML) @done(21-08-22 13:51)
+    ☐ Arreglar el paso de argumentos entre templates
     ☐ Modificar para reserva de dos pistas (Python)
     ☐ Modificar para reserva durante toda la semana (Python)
     ☐ Cupo de reserva maximo 2 veces a la semana
