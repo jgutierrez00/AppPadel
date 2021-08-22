@@ -15,7 +15,7 @@ def home():
     if request.method == 'POST':
         if request.form.get('mbtn'):
             eliminarReserva(current_user.nombre)
-            anyadirReserva(current_user.nombre, request.form.get('mbtn'))
+            anyadirReserva(current_user.nombre, request.form.get('mbtn'), str(current_user)[6:7])
         elif request.form.get('btn'):
             anyadirReserva(current_user.nombre, request.form.get('btn'), str(current_user)[6:7])
         elif request.form.get('modifybtn'):
@@ -53,7 +53,7 @@ def anyadirReserva(nombre, index, id):
     if exit == False:
         horas[idx][1] = nombre
 
-        #PENDIENTE
+        #PENDIENTE  
         users = User.query.filter_by(id=id)
         for user in users:
             user.reserva = 1
