@@ -2,22 +2,15 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-    <h1 class="display-4" style="text-align: center;">Horarios disponibles para reserva</h1>
+    <h1 class="display-4" style="text-align: center;">Dias disponibles para reserva</h1>
     <form method="POST">
         <ul class="list-group">
-                {% for item in horas %}
-                    {% set idx = horas.index(item) %}
-                    {% if item[1] == 'Libre' %}
-                        <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
-                    {% else %}
-                        <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
-                    {% endif %}
-                {% endfor %}
+            {% for item in dias %}
+                <button type="submit" id="btnday" value={{item[0]}} name="btnday" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}}</button>
+            {% endfor %}
         </ul>
         <br/>
-        <div class="d-flex justify-content-center">
-            <button type="submit" id="deletebtn" name="deletebtn" value="db"  class="btn btn-secondary btn-lg">Cancelar reserva</button>
-            <button type="submit" id="modifybtn" name="modifybtn" value="mb" style="margin-left: 100px;" class="btn btn-secondary btn-lg">Modificar reserva</button>
-        </div>
     </form>
 {% endblock %}
+
+

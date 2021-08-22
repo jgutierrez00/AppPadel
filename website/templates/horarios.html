@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    <h1 class="display-4" style="text-align: center;">Horarios disponibles para reserva</h1>
+    <br/>
+    <div class="row d-flex justify-content-lg-start">
+        <h1 class="display-4" style="padding-left: 125px;">Pista 1</h1>
+        <h1 class="display-4" style="padding-left: 590px">Pista 2</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <form method="POST">
+                    <ul class="list-group">
+                        {% for item in horasp1 %}
+                            {% set idx = horasp1.index(item)%}
+                            {% if item[1] == 'Libre' %}
+                                <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                            {% else %}
+                                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </form>
+            </div>
+            <div class="col-sm">
+                <form method="POST" class="btn-group-vertical d-flex justify-content-center">
+                    <button type="submit" id="cbtn" name="cbtn" class="btn btn-secondary btn-lg">Cancelar reservas</button>
+                    <button type="submit" id="mbtn1" name="mbtn1" class="btn btn-secondary btn-lg">Modificar reserva pista 1</button>
+                    <button type="submit" id="mbtn2" name="mbtn2" class="btn btn-secondary btn-lg">Modificar reserva pista 2</button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <form method="POST">
+                    <ul class="list-group">
+                        {% for item in horasp2 %}
+                            {% set idx = horasp2.index(item)%}
+                            {% if item[1] == 'Libre' %}
+                                <button type="submit" id="btn" value={{idx}} name="btn" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
+                            {% else %}
+                                    <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
