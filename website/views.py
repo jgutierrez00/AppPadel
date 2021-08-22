@@ -1,5 +1,6 @@
-from website.models import User
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from website.models import User, Information
+from flask import Blueprint, render_template, request, flash
+from sqlalchemy import update
 from flask_login import login_required, current_user
 from . import db
 
@@ -11,13 +12,12 @@ horas = [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Li
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-
     if request.method == 'POST':
         if request.form.get('mbtn'):
             eliminarReserva(current_user.nombre)
             anyadirReserva(current_user.nombre, request.form.get('mbtn'))
         elif request.form.get('btn'):
-            anyadirReserva(current_user.nombre, request.form.get('btn'))
+            anyadirReserva(current_user.nombre, request.form.get('btn'), str(current_user)[6:7])
         elif request.form.get('modifybtn'):
             return render_template('modify.html', user=current_user, horas=horas)
         elif request.form.get('deletebtn'):
@@ -41,7 +41,7 @@ def eliminarReserva(nombre):
         flash('Reserva eliminada con exito', category='success')
             
 
-def anyadirReserva(nombre, index):
+def anyadirReserva(nombre, index, id):
     exit = False
     cont = 0
     idx = int(index)
@@ -52,6 +52,12 @@ def anyadirReserva(nombre, index):
         cont = cont + 1
     if exit == False:
         horas[idx][1] = nombre
+
+        #PENDIENTE
+        users = User.query.filter_by(id=id)
+        for user in users:
+            user.reserva = 1
+        db.session.commit()
         flash('Reserva realizada con exito', category='success')
     else:
         flash('Usted ya ha realizado una reserva. Actualmente solo puede borrar su reserva o modificarla', category='error')

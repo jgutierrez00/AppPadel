@@ -15,9 +15,10 @@ def login():
         user = User.query.filter_by(dni=dni).first()
         if user:
             if check_password_hash(user.contrasenya, psw):
-                info = Information(ip=request.remote_addr, user_id=user.id)
-                db.session.add(info)
-                db.session.commit()
+                if checkIpUser(user.id, request.remote_addr) == False:
+                    info = Information(ip=request.remote_addr, user_id=user.id)
+                    db.session.add(info)
+                    db.session.commit()
                 flash('Sesion iniciada con exito', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -31,6 +32,7 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+
     logout_user()
     return redirect(url_for('auth.login'))
 
@@ -80,11 +82,12 @@ def sign_up():
                 contrasenya=generate_password_hash(password1, method='sha256'))
                 db.session.add(new_user)
                 db.session.commit()
-                login_user(user, remember=True)
-                id = User.query.filter_by(dni=dni).first()
-                info = Information(ip = request.remote_addr, user_id=str(id)[6:7])
+                login_user(new_user, remember=True)
+                user = User.query.filter_by(dni=dni).first()
+                info = Information(ip=request.remote_addr, user_id=user.id)
                 db.session.add(info)
                 db.session.commit()
+                print(info.ip)
                 flash('Usuario creado', category='success')
                 return redirect(url_for('views.home'))
         
@@ -147,3 +150,15 @@ def checkDni(dni):
         return 'E'
     if letra == 23:
         return 'T'
+
+
+def checkIpUser(userid, pIp):
+    ips = Information.query.filter_by(user_id=userid)
+    exit = False
+    for ip in ips:
+        if ip.ip == pIp:
+            exit = True
+            break
+    return exit
+        
+
