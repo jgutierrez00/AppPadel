@@ -1,5 +1,5 @@
 from website.models import User, Information
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 
@@ -14,22 +14,21 @@ horasp2 = [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', '
 dias = [['Lunes', horasp1, horasp2], ['Martes', horasp1, horasp2], ['Miercoles', horasp1, horasp2], 
 ['Jueves', horasp1, horasp2],['Viernes', horasp1, horasp2], ['Sabado', horasp1, horasp2], ['Domingo', horasp1, horasp2]]
 
+diaselect = 0
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
         if request.form.get('btnday'):
-            session['diaselect'] = request.form.get('btnday')
-            session['user'] = current_user
+            global diaselect
+            diaselect = int(request.form.get('btnday'))
             return redirect(url_for('views.horarios'))
-
     return render_template("home.html", dias=dias, user=current_user)
 
 @views.route('/horarios', methods=['GET', 'POST'])
 @login_required
 def horarios():
-    diaselect = session.get('diaselect',None)
     if request.method == 'POST':
         if request.form.get('btn1'):
             anyadirReserva(current_user.nombre, dias[diaselect][1], request.form.get('btn1'), str(current_user)[6:7], diaselect, 1)
@@ -44,9 +43,11 @@ def horarios():
         elif request.form.get('cbtn1'):
             eliminarReserva(current_user.nombre, dias[diaselect][1], diaselect, 1)
         elif request.form.get('cbtn2'):
-            eliminarReserva(current_user.nombre, dias[diaselect][2], diaselect, 2)         
+            eliminarReserva(current_user.nombre, dias[diaselect][2], diaselect, 2)
+        elif request.form.get('gbbtn'):
+            return redirect(url_for('views.home'))      
     
-    return render_template("horarios.html", user=current_user, dias1=dias[int(diaselect)][1], dias2=dias[int(diaselect)][2])
+    return render_template("horarios.html", user=current_user, dias1=dias[diaselect][1], dias2=dias[diaselect][2])
 
 def eliminarReserva(nombre, horas, dia, pista):
     exit = False
