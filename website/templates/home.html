@@ -5,7 +5,7 @@
     <h1 class="display-4" style="text-align: center;">Dias disponibles para reserva</h1>
     <form method="POST">
         <ul class="list-group">
-            {% for item in map.keys() %}
+            {% for item in keys %}
                 <button type="submit" id="btnday" value={{item}} name="btnday" class="list-group-item list-group-item list-group-item-action">{{item}}</button>
             {% endfor %}
         </ul>

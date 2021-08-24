@@ -7,51 +7,46 @@ import collections
 
 views = Blueprint('views', __name__)
 
-dict = {'Pista1': [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
-['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']],
-'Pista2': [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
-['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']]}
+dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
-dict1 = {'Lunes': dict, 'Martes': dict, 'Miercoles': dict}
-
-dict2 = {'Jueves': dict, 'Viernes': dict, 'Sabado': dict}
-
-map = collections.ChainMap(dict2, dict1)
+dictF = {}
 
 diaselect = 0
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    if len(dictF) == 0:
+        init()
     if request.method == 'POST':
         if request.form.get('btnday'):
             global diaselect
             diaselect = request.form.get('btnday')
             return redirect(url_for('views.horarios'))
-    return render_template("home.html", map=map, user=current_user)
+    return render_template("home.html", keys=dictF.keys(), user=current_user)
 
 @views.route('/horarios', methods=['GET', 'POST'])
 @login_required
 def horarios():
     if request.method == 'POST':
         if request.form.get('btn1'):
-            anyadirReserva(current_user.nombre, map, request.form.get('btn1'), str(current_user)[6:7], diaselect, 'Pista1')
+            anyadirReserva(current_user.nombre, request.form.get('btn1'), str(current_user)[6:7], diaselect, 'Pista1')
         elif request.form.get('btn2'):
-            anyadirReserva(current_user.nombre, map, request.form.get('btn2'), str(current_user)[6:7], diaselect, 'Pista2')
+            anyadirReserva(current_user.nombre, request.form.get('btn2'), str(current_user)[6:7], diaselect, 'Pista2')
         elif request.form.get('mbtn1'):
             eliminarReserva(current_user.nombre, diaselect, 'Pista1')
-            anyadirReserva(current_user.nombre,map, request.form.get('mbtn1'), str(current_user)[6:7], diaselect, 'Pista1')
+            anyadirReserva(current_user.nombre,request.form.get('mbtn1'), str(current_user)[6:7], diaselect, 'Pista1')
         elif request.form.get('mbtn2'):
             eliminarReserva(current_user.nombre, diaselect, 'Pista2')
-            anyadirReserva(current_user.nombre, map, request.form.get('mbtn2'), str(current_user)[6:7], diaselect, 'Pista2')
+            anyadirReserva(current_user.nombre, request.form.get('mbtn2'), str(current_user)[6:7], diaselect, 'Pista2')
         elif request.form.get('cbtn1'):
-            eliminarReserva(current_user.nombre, map, diaselect, 'Pista1')
+            eliminarReserva(current_user.nombre, diaselect, 'Pista1')
         elif request.form.get('cbtn2'):
-            eliminarReserva(current_user.nombre, map, diaselect, 'Pista2')
+            eliminarReserva(current_user.nombre, diaselect, 'Pista2')
         elif request.form.get('gbbtn'):
             return redirect(url_for('views.home'))      
     
-    return render_template("horarios.html", user=current_user, dias1=map[diaselect]['Pista1'], dias2=map[diaselect]['Pista2'])
+    return render_template("horarios.html", user=current_user, dias1=dictF.get(diaselect).get('Pista1'), dias2=dictF.get(diaselect).get('Pista2'))
 
 def eliminarReserva(nombre, map, dia, pista):
     exit = False
@@ -70,33 +65,46 @@ def eliminarReserva(nombre, map, dia, pista):
         flash('Reserva eliminada con exito', category='success')
             
 
-def anyadirReserva(nombre, map, pIdx, id, dia, pista):
-    exit = False
-    cont = 0
-    idx = int(pIdx)
-    values = map[dia][pista].copy()
-    while exit == False and cont < len(values):
-        if values[cont][1] == nombre:
-            exit = True
+def anyadirReserva(nombre, pIdx, id, dia, pista):
+    global dictF
+    dictcpy = dictF.get(dia)
+    print('Diccionario asociado al dia', dictcpy,'\n')
+    print('--------------------------')
+    values = dictcpy[pista]
+    values[int(pIdx)][1] = nombre
+    print('Lista de valores asociados al diccionario dia de la pista 1', values,'\n')
+    print('--------------------------')
+    dict = {pista: values}
+    print('Diccionario con los nuevos valores. Tiene que ser igual al dicc de dia por la mitad',dict,'\n')
+    print('--------------------------')
+    dictcpy.update(dict)
+    print('Diccionario de dia actualizado', dictcpy,'\n')
+    print('--------------------------')
+    dictcpy2 = {dia: dictcpy}
+    #LO DE ARRIBA ESTA BIEN
+    dictF.update(dictcpy2)
+    print(dictF.keys())
         
-        cont = cont + 1
-    if exit == False:
-        values[idx][1] = nombre
-        # #PENDIENTE  
+
+
+
+            # #PENDIENTE  
         # users = User.query.filter_by(id=id)
         # for user in users:
         #     user.reserva = 1
         # db.session.commit()
         # flash('Reserva realizada con exito', category='success')
-    else:
-        flash('Usted ya ha realizado una reserva. Actualmente solo puede borrar su reserva o modificarla', category='error')
+    # else:
+    #     flash('Usted ya ha realizado una reserva. Actualmente solo puede borrar su reserva o modificarla', category='error')
 
-        
-
-def toString():
+    
+def init():
+    string = ''
+    cont = 0
     for i in dias:
-        print(i[0]+":\n")
-        for j in i[1]:
-            print(j," ")
-        for j in i[2]:
-            print(j," ")
+        string = 'dict'+str(cont)
+        string = {'Pista1': [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
+        ['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']],
+        'Pista2': [['10:00- 11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
+        ['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']]}
+        dictF.setdefault(i, string)
