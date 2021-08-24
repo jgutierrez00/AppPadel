@@ -10,6 +10,8 @@ Tasks:
     ✔ Modificar para reserva de dos pistas (Python) @done(21-08-24 13:15)
     ✔ Modificar para reserva durante toda la semana (Python) @done(21-08-24 13:15)
     ✔ Cupo de reserva maximo 2 veces a la semana @done(21-08-24 13:15)
+    ☐ Aplicar a todo el mes (DE MOMENTO NADA)
+    ☐ Generar claves
     ☐ Hacer check de ip
     ☐ Introducir en la base las personas por piso y por comunidad para hacer los checks de ip
     ☐ Intentar arreglar el fadeout de los flash

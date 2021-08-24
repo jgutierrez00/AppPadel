@@ -2,7 +2,6 @@ from website.models import User, Information
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
-import collections
 
 
 views = Blueprint('views', __name__)
@@ -30,28 +29,29 @@ def home():
 @views.route('/horarios', methods=['GET', 'POST'])
 @login_required
 def horarios():
+    piso = request.cookies.get('piso')
     if request.method == 'POST':
         if request.form.get('btn1'):
-            anyadirReserva(current_user.nombre, request.form.get('btn1'), str(current_user)[6:7], diaselect, 'Pista1')
+            anyadirReserva(piso, request.form.get('btn1'), str(current_user)[6:7], diaselect, 'Pista1')
         elif request.form.get('btn2'):
-            anyadirReserva(current_user.nombre, request.form.get('btn2'), str(current_user)[6:7], diaselect, 'Pista2')
+            anyadirReserva(piso, request.form.get('btn2'), str(current_user)[6:7], diaselect, 'Pista2')
         elif request.form.get('cbtn1'):
-            eliminarReserva(current_user.nombre, diaselect, 'Pista1', str(current_user)[6:7])
+            eliminarReserva(piso, diaselect, 'Pista1', str(current_user)[6:7])
         elif request.form.get('cbtn2'):
-            eliminarReserva(current_user.nombre, diaselect, 'Pista2', str(current_user)[6:7])
+            eliminarReserva(piso, diaselect, 'Pista2', str(current_user)[6:7])
         elif request.form.get('gbbtn'):
             return redirect(url_for('views.home'))      
     
     return render_template("horarios.html", user=current_user, dias1=dictF.get(diaselect).get('Pista1'), dias2=dictF.get(diaselect).get('Pista2'))
 
-def eliminarReserva(nombre, dia, pista, id):
+def eliminarReserva(piso, dia, pista, id):
     global dictF
     dictcpy = dictF.get(dia)
     values = dictcpy[pista]
     cont = 0
     exit = False
     while exit == False and cont < len(values):
-        if values[cont][1] == nombre:
+        if values[cont][1] == piso:
             values[cont][1] = 'Libre'
             exit = True
         cont = cont + 1
@@ -76,12 +76,11 @@ def eliminarReserva(nombre, dia, pista, id):
         db.session.commit()
         flash('Reserva eliminada con exito', category='success')
     else:
-        string = "Usted no tiene reserva para el dia ", dia, " en la pista", pista[4:5]
-        flash(string, category='error')
+        flash('Usted no tiene reserva para el dia '+ dia + ' en la pista ' + pista[-1], category='error')
         
             
 
-def anyadirReserva(nombre, pIdx, id, dia, pista):
+def anyadirReserva(piso, pIdx, id, dia, pista):
     info = Information.query.filter_by(user_id=id).first()
     if info.numReservas == 2:
         flash('Usted ha cumplido el numero maximo de reservas. Actualmente solo puede borrar sus reservas o modificarlas', category='error')   
@@ -91,7 +90,7 @@ def anyadirReserva(nombre, pIdx, id, dia, pista):
         dictcpy = dictF.get(dia)
         values = dictcpy[pista]
         hora = values[int(pIdx)][0]
-        values[int(pIdx)][1] = nombre
+        values[int(pIdx)][1] = piso
         dict = {pista: values}
         dictcpy.update(dict)
         dictcpy2 = {dia: dictcpy}
