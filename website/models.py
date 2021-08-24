@@ -6,7 +6,6 @@ from sqlalchemy.sql import func
 
 class Information(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement="auto")
-    ip = db.Column(db.String(128))
     data = db.Column(db.DateTime(timezone=True), default=func.now())
     numReservas = db.Column(db.Integer, default=0, nullable=False)
     reserva1info = db.Column(db.String(128))
@@ -22,8 +21,7 @@ class User(db.Model, UserMixin):
     dni = db.Column(db.String(10), unique=True)
     piso = db.Column(db.String(128))
     contrasenya = db.Column(db.String(128))
-
-
+    ip = db.Column(db.String(128))
     information = relationship("Information")
     
 

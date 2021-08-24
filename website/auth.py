@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import Information, User
 from . import db
@@ -15,7 +16,7 @@ def login():
         user = User.query.filter_by(dni=dni).first()
         if user:
             if check_password_hash(user.contrasenya, psw):
-                if checkIpUser(user.id, request.remote_addr) == False:
+                if checkIp(request.remote_addr, user.id) == True:
                     info = Information(ip=request.remote_addr, user_id=user.id)
                     db.session.add(info)
                     db.session.commit()
@@ -79,9 +80,11 @@ def sign_up():
                 if user:
                     flash('El piso introducido ya esta registrado', category='error')
                 new_user = User(nombre=nombre, apellido1=apellido1, apellido2=apellido2, dni=dni, piso=piso,
-                contrasenya=generate_password_hash(password1, method='sha256'))
+                contrasenya=generate_password_hash(password1, method='sha256'), ip=request.remote_addr)
                 db.session.add(new_user)
                 db.session.commit()
+                user = User.query.filter_by(dni=dni).first()
+                # CHECK DE IP
                 login_user(new_user, remember=True)
                 user = User.query.filter_by(dni=dni).first()
                 info = Information(ip=request.remote_addr, user_id=user.id)
@@ -152,13 +155,11 @@ def checkDni(dni):
         return 'T'
 
 
-def checkIpUser(userid, pIp):
-    ips = Information.query.filter_by(user_id=userid)
-    exit = False
-    for ip in ips:
-        if ip.ip == pIp:
-            exit = True
-            break
-    return exit
+def checkIp(ip, id):
+    info = Information.query.filter_by(ip=ip).first()
+    if info.ip == ip and info.numReservas > 0 and id != info.user_id:
+        return False
+    
+    return True
         
 
