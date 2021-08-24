@@ -6,10 +6,10 @@ Tasks:
     ✔ Comprobar que las ips son correctas y que funciona correctamente @done(21-08-22 12:21)
     ✔ Modificar para reserva de dos pistas (HTML) @done(21-08-22 13:51)
     ✔ Modificar para reserva durante toda la semana (HTML) @done(21-08-22 13:51)
-    ☐ Arreglar el paso de argumentos entre templates
-    ☐ Modificar para reserva de dos pistas (Python)
-    ☐ Modificar para reserva durante toda la semana (Python)
-    ☐ Cupo de reserva maximo 2 veces a la semana
-    ☐ Hacer que al reservar una ip, si hay mas usuarios registrados con dicha ip se les modifique el atributo reservas
+    ✔ Arreglar el paso de argumentos entre templates @done(21-08-24 11:47)
+    ✔ Modificar para reserva de dos pistas (Python) @done(21-08-24 13:15)
+    ✔ Modificar para reserva durante toda la semana (Python) @done(21-08-24 13:15)
+    ✔ Cupo de reserva maximo 2 veces a la semana @done(21-08-24 13:15)
+    ☐ Hacer check de ip
     ☐ Intentar arreglar el fadeout de los flash
 

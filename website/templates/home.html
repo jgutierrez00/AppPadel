@@ -9,8 +9,22 @@
                 <button type="submit" id="btnday" value={{item}} name="btnday" class="list-group-item list-group-item list-group-item-action">{{item}}</button>
             {% endfor %}
         </ul>
-        <br/>
     </form>
+    <br/>
+    <div class="d-flex justify-content-center">
+        Reservas:
+        <div class="d-flex justify-content-center">
+            <ul class="list-group list-group-flush">
+                {% for value in reservas %}
+                    {% if value != None %}
+                        <li class="list-group-item">{{value}}</li>
+                    {% else %}
+                        <li class="list-group-item">Sin reserva</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 
