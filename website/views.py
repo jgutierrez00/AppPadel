@@ -68,22 +68,12 @@ def eliminarReserva(nombre, map, dia, pista):
 def anyadirReserva(nombre, pIdx, id, dia, pista):
     global dictF
     dictcpy = dictF.get(dia)
-    print('Diccionario asociado al dia', dictcpy,'\n')
-    print('--------------------------')
     values = dictcpy[pista]
     values[int(pIdx)][1] = nombre
-    print('Lista de valores asociados al diccionario dia de la pista 1', values,'\n')
-    print('--------------------------')
     dict = {pista: values}
-    print('Diccionario con los nuevos valores. Tiene que ser igual al dicc de dia por la mitad',dict,'\n')
-    print('--------------------------')
     dictcpy.update(dict)
-    print('Diccionario de dia actualizado', dictcpy,'\n')
-    print('--------------------------')
     dictcpy2 = {dia: dictcpy}
-    #LO DE ARRIBA ESTA BIEN
     dictF.update(dictcpy2)
-    print(dictF.keys())
         
 
 
