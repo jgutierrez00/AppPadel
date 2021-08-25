@@ -3,46 +3,69 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 
+views = Blueprint("views", __name__)
 
-views = Blueprint('views', __name__)
+dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
 
-dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
-
-reservas = {'Reserva 1': None, 'Reserva 2': None}
+reservas = {"Reserva 1": None, "Reserva 2": None}
 
 dictF = {}
 
 diaselect = 0
 
-@views.route('/', methods=['GET', 'POST'])
+
+@views.route("/", methods=["GET", "POST"])
 @login_required
 def home():
+    if not initDB:
+        initDB()
     if len(dictF) == 0:
         init()
-    if request.method == 'POST':
-        if request.form.get('btnday'):
+    if request.method == "POST":
+        if request.form.get("btnday"):
             global diaselect
-            diaselect = request.form.get('btnday')
-            return redirect(url_for('views.horarios'))
-    return render_template("home.html", keys=dictF.keys(), reservas=reservas.values(), user=current_user)
+            diaselect = request.form.get("btnday")
+            return redirect(url_for("views.horarios"))
+    return render_template(
+        "home.html", keys=dictF.keys(), reservas=reservas.values(), user=current_user
+    )
 
-@views.route('/horarios', methods=['GET', 'POST'])
+
+@views.route("/horarios", methods=["GET", "POST"])
 @login_required
 def horarios():
-    piso = request.cookies.get('piso')
-    if request.method == 'POST':
-        if request.form.get('btn1'):
-            anyadirReserva(piso, request.form.get('btn1'), str(current_user)[6:7], diaselect, 'Pista1')
-        elif request.form.get('btn2'):
-            anyadirReserva(piso, request.form.get('btn2'), str(current_user)[6:7], diaselect, 'Pista2')
-        elif request.form.get('cbtn1'):
-            eliminarReserva(piso, diaselect, 'Pista1', str(current_user)[6:7])
-        elif request.form.get('cbtn2'):
-            eliminarReserva(piso, diaselect, 'Pista2', str(current_user)[6:7])
-        elif request.form.get('gbbtn'):
-            return redirect(url_for('views.home'))      
-    
-    return render_template("horarios.html", user=current_user, dias1=dictF.get(diaselect).get('Pista1'), dias2=dictF.get(diaselect).get('Pista2'))
+    piso = request.cookies.get("piso")
+    if request.method == "POST":
+        if request.form.get("btn1"):
+            anyadirReserva(
+                piso,
+                request.form.get("btn1"),
+                str(current_user)[6:7],
+                diaselect,
+                "Pista1",
+            )
+        elif request.form.get("btn2"):
+            anyadirReserva(
+                piso,
+                request.form.get("btn2"),
+                str(current_user)[6:7],
+                diaselect,
+                "Pista2",
+            )
+        elif request.form.get("cbtn1"):
+            eliminarReserva(piso, diaselect, "Pista1", str(current_user)[6:7])
+        elif request.form.get("cbtn2"):
+            eliminarReserva(piso, diaselect, "Pista2", str(current_user)[6:7])
+        elif request.form.get("gbbtn"):
+            return redirect(url_for("views.home"))
+
+    return render_template(
+        "horarios.html",
+        user=current_user,
+        dias1=dictF.get(diaselect).get("Pista1"),
+        dias2=dictF.get(diaselect).get("Pista2"),
+    )
+
 
 def eliminarReserva(piso, dia, pista, id):
     global dictF
@@ -52,7 +75,7 @@ def eliminarReserva(piso, dia, pista, id):
     exit = False
     while exit == False and cont < len(values):
         if values[cont][1] == piso:
-            values[cont][1] = 'Libre'
+            values[cont][1] = "Libre"
             exit = True
         cont = cont + 1
     if exit == True:
@@ -62,28 +85,33 @@ def eliminarReserva(piso, dia, pista, id):
         dictcpy2 = {dia: dictcpy}
         dictF.update(dictcpy2)
         info = Information.query.filter_by(user_id=id).first()
-        if info.reserva1info.split(' ')[1] == dia:
-            dict = {'Reserva 1': None}
+        if info.reserva1info.split(" ")[1] == dia:
+            dict = {"Reserva 1": None}
             reservas.update(dict)
-            info.reserva1Info = 'None'
+            info.reserva1Info = "None"
 
-        elif info.reserva2Info.split(' ')[1] == dia:
-            dict = {'Reserva 2': None}
+        elif info.reserva2Info.split(" ")[1] == dia:
+            dict = {"Reserva 2": None}
             reservas.update(dict)
-            info.reserva2Info = 'None'
+            info.reserva2Info = "None"
 
         info.numReservas = info.numReservas - 1
         db.session.commit()
-        flash('Reserva eliminada con exito', category='success')
+        flash("Reserva eliminada con exito", category="success")
     else:
-        flash('Usted no tiene reserva para el dia '+ dia + ' en la pista ' + pista[-1], category='error')
-        
-            
+        flash(
+            "Usted no tiene reserva para el dia " + dia + " en la pista " + pista[-1],
+            category="error",
+        )
+
 
 def anyadirReserva(piso, pIdx, id, dia, pista):
     info = Information.query.filter_by(user_id=id).first()
     if info.numReservas == 2:
-        flash('Usted ha cumplido el numero maximo de reservas. Actualmente solo puede borrar sus reservas o modificarlas', category='error')   
+        flash(
+            "Usted ha cumplido el numero maximo de reservas. Actualmente solo puede borrar sus reservas o modificarlas",
+            category="error",
+        )
     else:
         global dictF
         global reservas
@@ -95,32 +123,51 @@ def anyadirReserva(piso, pIdx, id, dia, pista):
         dictcpy.update(dict)
         dictcpy2 = {dia: dictcpy}
         dictF.update(dictcpy2)
-        rstr = ''
+        rstr = ""
         if info.reserva1info == None:
-            rstr += 'Dia: ' + str(dia) + ' Pista: ' + str(pista[-1]) + ' Hora: ' + str(hora)
-            dict = {'Reserva 1': rstr}
+            rstr += (
+                "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
+            )
+            dict = {"Reserva 1": rstr}
             reservas.update(dict)
             info.reserva1info = rstr
 
         elif info.reserva2info == None:
-            rstr += 'Dia: ' + str(dia) + ' Pista: ' + str(pista[-1]) + ' Hora: ' + str(hora)
-            dict = {'Reserva 2': rstr}
+            rstr += (
+                "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
+            )
+            dict = {"Reserva 2": rstr}
             reservas.update(dict)
             info.reserva2info = rstr
 
         info.numReservas = info.numReservas + 1
         db.session.commit()
-        flash('Reserva realizada con exito', category='success')  
+        flash("Reserva realizada con exito", category="success")
 
-    
+
 def init():
-    string = ''
+    string = ""
     cont = 0
     for i in dias:
-        string = 'dict'+str(cont)
-        string = {'Pista1': [['10:00-11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
-        ['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']],
-        'Pista2': [['10:00- 11:30', 'Libre'], ['11:30-13:00', 'Libre'], ['15:00-16:30', 'Libre'], ['16:30-18:00', 'Libre'], 
-        ['18:00-19:30', 'Libre'], ['19:30-21:00', 'Libre'], ['21:00-22:30', 'Libre']]}
+        string = "dict" + str(cont)
+        string = {
+            "Pista1": [
+                ["10:00-11:30", "Libre"],
+                ["11:30-13:00", "Libre"],
+                ["15:00-16:30", "Libre"],
+                ["16:30-18:00", "Libre"],
+                ["18:00-19:30", "Libre"],
+                ["19:30-21:00", "Libre"],
+                ["21:00-22:30", "Libre"],
+            ],
+            "Pista2": [
+                ["10:00- 11:30", "Libre"],
+                ["11:30-13:00", "Libre"],
+                ["15:00-16:30", "Libre"],
+                ["16:30-18:00", "Libre"],
+                ["18:00-19:30", "Libre"],
+                ["19:30-21:00", "Libre"],
+                ["21:00-22:30", "Libre"],
+            ],
+        }
         dictF.setdefault(i, string)
-
