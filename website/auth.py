@@ -9,21 +9,14 @@ from flask import (
 )
 from .models import Information, User
 from . import db
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-import random
-import string
-
 
 auth = Blueprint("auth", __name__)
-
-initDB = False
 
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-    if not initDB:
-        init()
     if request.method == "POST":
         piso = request.form.get("piso")
         psw = request.form.get("psw")
@@ -61,26 +54,3 @@ def checkIp(ip, id):
         return False
 
     return True
-
-
-def init():
-    global initDB
-    initDB = True
-    pisorec1 = ""
-    pisorec2 = ""
-    source = string.ascii_letters + string.digits
-    for i in range(10):
-        pisorec1 += "Portal " + str(i + 1)
-        for j in range(7):
-            pisorec2 = pisorec1 + " " + str(j + 1) + "º"
-            for k in range(5):
-                piso = pisorec2 + chr(65 + k)
-                key = "".join((random.choice(source) for i in range(8)))
-                user = User(piso=piso, contrasenya=generate_password_hash(key))
-                db.session.add(user)
-            pisorec2 = ""
-        pisorec1 = ""
-
-    user = User(piso="admin", contrasenya=generate_password_hash("notadminpassword"))
-    db.session.add(user)
-    db.session.commit()

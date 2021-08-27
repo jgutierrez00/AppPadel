@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 
+
 views = Blueprint("views", __name__)
 
 dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
@@ -11,14 +12,23 @@ reservas = {"Reserva 1": None, "Reserva 2": None}
 
 dictF = {}
 
+invr1 = False
+invr2 = False
+
 diaselect = 0
+
+piso = ""
+
+resinfo1 = ""
+resinfo2 = ""
 
 
 @views.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    if not initDB:
-        initDB()
+    global piso
+    piso = request.cookies.get("piso")
+    updateReservas(piso)
     if len(dictF) == 0:
         init()
     if request.method == "POST":
@@ -26,6 +36,13 @@ def home():
             global diaselect
             diaselect = request.form.get("btnday")
             return redirect(url_for("views.horarios"))
+        elif request.form.get("1"):
+            global invr1
+            invr1 = True
+        elif request.form.get("2"):
+            global invr2
+            invr2 = True
+
     return render_template(
         "home.html", keys=dictF.keys(), reservas=reservas.values(), user=current_user
     )
@@ -128,16 +145,12 @@ def anyadirReserva(piso, pIdx, id, dia, pista):
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
-            dict = {"Reserva 1": rstr}
-            reservas.update(dict)
             info.reserva1info = rstr
 
         elif info.reserva2info == None:
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
-            dict = {"Reserva 2": rstr}
-            reservas.update(dict)
             info.reserva2info = rstr
 
         info.numReservas = info.numReservas + 1
@@ -152,22 +165,31 @@ def init():
         string = "dict" + str(cont)
         string = {
             "Pista1": [
-                ["10:00-11:30", "Libre"],
-                ["11:30-13:00", "Libre"],
-                ["15:00-16:30", "Libre"],
-                ["16:30-18:00", "Libre"],
-                ["18:00-19:30", "Libre"],
-                ["19:30-21:00", "Libre"],
-                ["21:00-22:30", "Libre"],
+                ["10:00-11:15", "Libre"],
+                ["11:15-12:30", "Libre"],
+                ["12:30-13:45", "Libre"],
+                ["13:45-15:00", "Libre"],
+                ["17:00-18:30", "Libre"],
+                ["18:30-20:30", "Libre"],
+                ["20:30-22:00", "Libre"],
             ],
             "Pista2": [
-                ["10:00- 11:30", "Libre"],
-                ["11:30-13:00", "Libre"],
-                ["15:00-16:30", "Libre"],
-                ["16:30-18:00", "Libre"],
-                ["18:00-19:30", "Libre"],
-                ["19:30-21:00", "Libre"],
-                ["21:00-22:30", "Libre"],
+                ["10:00-11:15", "Libre"],
+                ["11:15-12:30", "Libre"],
+                ["12:30-13:45", "Libre"],
+                ["13:45-15:00", "Libre"],
+                ["17:00-18:30", "Libre"],
+                ["18:30-20:30", "Libre"],
+                ["20:30-22:00", "Libre"],
             ],
         }
         dictF.setdefault(i, string)
+
+
+def updateReservas(piso):
+    user = User.query.filter_by(piso=piso).first()
+    info = Information.query.filter_by(user_id=user.id).first()
+    global resinfo1
+    global resinfo2
+    resinfo1 = info.reserva1info
+    resinfo2 = info.reserva2info

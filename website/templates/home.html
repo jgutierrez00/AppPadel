@@ -15,13 +15,9 @@
         Reservas:
         <div class="d-flex justify-content-center">
             <ul class="list-group list-group-flush">
-                {% for value in reservas %}
-                    {% if value != None %}
-                        <li class="list-group-item">{{value}}</li>
-                    {% else %}
-                        <li class="list-group-item">Sin reserva</li>
-                    {% endif %}
-                {% endfor %}
+                <li class="list-group-item">{{resinfo1}}</li>
+                <br/>
+                <li class="list-group-item">{{resinfo2}}</li>
             </ul>
         </div>
     </div>
