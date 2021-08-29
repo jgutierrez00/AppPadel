@@ -12,8 +12,8 @@ class Information(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement="auto")
     data = db.Column(db.DateTime(timezone=True), default=func.now())
     numReservas = db.Column(db.Integer, default=0, nullable=False)
-    reserva1info = db.Column(db.String(128), default="Sin reserva")
-    reserva2info = db.Column(db.String(128), default="Sin reserva")
+    reserva1info = db.Column(db.String(128))
+    reserva2info = db.Column(db.String(128))
     user_id = db.Column(db.Integer, ForeignKey("user.id"))
 
 

@@ -15,9 +15,9 @@
         Reservas:
         <div class="d-flex justify-content-center">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{resinfo1}}</li>
-                <br/>
-                <li class="list-group-item">{{resinfo2}}</li>
+                {% for value in reservas %}
+                    <li class="list-group-item">{{value}}</li>
+                {% endfor %}
             </ul>
         </div>
     </div>

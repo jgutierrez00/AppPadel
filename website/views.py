@@ -1,3 +1,4 @@
+from sqlalchemy.sql.expression import update
 from website.models import User, Information
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
@@ -8,7 +9,7 @@ views = Blueprint("views", __name__)
 
 dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
 
-reservas = {"Reserva 1": None, "Reserva 2": None}
+reservas = {"Reserva 1": "Sin reserva", "Reserva 2": "Sin reserva"}
 
 dictF = {}
 
@@ -18,9 +19,6 @@ invr2 = False
 diaselect = 0
 
 piso = ""
-
-resinfo1 = ""
-resinfo2 = ""
 
 
 @views.route("/", methods=["GET", "POST"])
@@ -57,7 +55,6 @@ def horarios():
             anyadirReserva(
                 piso,
                 request.form.get("btn1"),
-                str(current_user)[6:7],
                 diaselect,
                 "Pista1",
             )
@@ -65,16 +62,20 @@ def horarios():
             anyadirReserva(
                 piso,
                 request.form.get("btn2"),
-                str(current_user)[6:7],
                 diaselect,
                 "Pista2",
             )
         elif request.form.get("cbtn1"):
-            eliminarReserva(piso, diaselect, "Pista1", str(current_user)[6:7])
+            eliminarReserva(piso, diaselect, "Pista1")
         elif request.form.get("cbtn2"):
-            eliminarReserva(piso, diaselect, "Pista2", str(current_user)[6:7])
+            eliminarReserva(piso, diaselect, "Pista2")
         elif request.form.get("gbbtn"):
-            return redirect(url_for("views.home"))
+            return render_template(
+                "home.html",
+                keys=dictF.keys(),
+                reservas=reservas.values(),
+                user=current_user,
+            )
 
     return render_template(
         "horarios.html",
@@ -84,7 +85,7 @@ def horarios():
     )
 
 
-def eliminarReserva(piso, dia, pista, id):
+def eliminarReserva(piso, dia, pista):
     global dictF
     dictcpy = dictF.get(dia)
     values = dictcpy[pista]
@@ -101,19 +102,15 @@ def eliminarReserva(piso, dia, pista, id):
         dictcpy.update(dict)
         dictcpy2 = {dia: dictcpy}
         dictF.update(dictcpy2)
-        info = Information.query.filter_by(user_id=id).first()
+        user = User.query.filter_by(piso=piso).first()
+        info = Information.query.filter_by(user_id=user.id).first()
         if info.reserva1info.split(" ")[1] == dia:
-            dict = {"Reserva 1": None}
-            reservas.update(dict)
-            info.reserva1Info = "None"
-
-        elif info.reserva2Info.split(" ")[1] == dia:
-            dict = {"Reserva 2": None}
-            reservas.update(dict)
-            info.reserva2Info = "None"
-
+            info.reserva1info = None
+        elif info.reserva2info.split(" ")[1] == dia:
+            info.reserva2info = None
         info.numReservas = info.numReservas - 1
         db.session.commit()
+        updateReservas(piso)
         flash("Reserva eliminada con exito", category="success")
     else:
         flash(
@@ -122,8 +119,9 @@ def eliminarReserva(piso, dia, pista, id):
         )
 
 
-def anyadirReserva(piso, pIdx, id, dia, pista):
-    info = Information.query.filter_by(user_id=id).first()
+def anyadirReserva(piso, pIdx, dia, pista):
+    user = User.query.filter_by(piso=piso).first()
+    info = Information.query.filter_by(user_id=user.id).first()
     if info.numReservas == 2:
         flash(
             "Usted ha cumplido el numero maximo de reservas. Actualmente solo puede borrar sus reservas o modificarlas",
@@ -141,20 +139,20 @@ def anyadirReserva(piso, pIdx, id, dia, pista):
         dictcpy2 = {dia: dictcpy}
         dictF.update(dictcpy2)
         rstr = ""
-        if info.reserva1info == None:
+        if info.reserva1info == None or info.reserva1info == "":
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
             info.reserva1info = rstr
 
-        elif info.reserva2info == None:
+        elif info.reserva2info == None or info.reserva2info == "":
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
             info.reserva2info = rstr
-
         info.numReservas = info.numReservas + 1
         db.session.commit()
+        updateReservas(piso)
         flash("Reserva realizada con exito", category="success")
 
 
@@ -189,7 +187,12 @@ def init():
 def updateReservas(piso):
     user = User.query.filter_by(piso=piso).first()
     info = Information.query.filter_by(user_id=user.id).first()
-    global resinfo1
-    global resinfo2
-    resinfo1 = info.reserva1info
-    resinfo2 = info.reserva2info
+    if info.reserva1info == None and info.reserva2info == None:
+        dict = {"Reserva 1": "Sin reserva", "Reserva 2": "Sin reserva"}
+    elif info.reserva1info == None and info.reserva2info != None:
+        dict = {"Reserva 1": "Sin reserva", "Reserva 2": info.reserva2info}
+    elif info.reserva1info != None and info.reserva2info == None:
+        dict = {"Reserva 1": info.reserva1info, "Reserva 2": "Sin reserva"}
+    else:
+        dict = {"Reserva 1": info.reserva1info, "Reserva 2": info.reserva2info}
+    reservas.update(dict)

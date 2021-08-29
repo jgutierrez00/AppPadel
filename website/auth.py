@@ -30,7 +30,7 @@ def login():
                 flash("Sesion iniciada con exito", category="success")
                 login_user(user, remember=True)
                 resp = make_response(redirect(url_for("views.home")))
-                resp.set_cookie("piso", user.piso)
+                resp.set_cookie("piso", value=user.piso)
                 return resp
             else:
                 flash("La contraseña es incorrecta", category="error")
@@ -43,9 +43,10 @@ def login():
 @auth.route("/logout")
 @login_required
 def logout():
-
+    resp = make_response(redirect(url_for("auth.login")))
+    resp.delete_cookie("piso")
     logout_user()
-    return redirect(url_for("auth.login"))
+    return resp
 
 
 def checkIp(ip, id):
