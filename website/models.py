@@ -5,6 +5,7 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 import string, random
+from os import path
 from werkzeug.security import generate_password_hash
 
 
@@ -29,18 +30,22 @@ class User(db.Model, UserMixin):
 def create_users(*args, **kwargs):
     # pisorec1 = ""
     # pisorec2 = ""
-    # source = string.ascii_letters + string.digits
-    # for i in range(10):
-    #     pisorec1 += "Portal " + str(i + 1)
-    #     for j in range(7):
-    #         pisorec2 = pisorec1 + " " + str(j + 1) + "º"
-    #         for k in range(5):
-    #             piso = pisorec2 + chr(65 + k)
-    #             key = "".join((random.choice(source) for i in range(8)))
-    #             user = User(piso=piso, contrasenya=generate_password_hash(key))
-    #             db.session.add(user)
-    #         pisorec2 = ""
-    #     pisorec1 = ""
+    # if not path("website").is_file():
+    #     text_file = open("keys.txt", "w")
+    #     source = string.ascii_letters + string.digits
+    #     for i in range(10):
+    #         pisorec1 += "Portal " + str(i + 1)
+    #         for j in range(7):
+    #             pisorec2 = pisorec1 + " " + str(j + 1) + "º"
+    #             for k in range(5):
+    #                 piso = pisorec2 + chr(65 + k)
+    #                 key = "".join((random.choice(source) for i in range(8)))
+    #                 text_file.write(piso + " " + key + "\n")
+    #                 user = User(piso=piso, contrasenya=generate_password_hash(key))
+    #                 db.session.add(user)
+    #             pisorec2 = ""
+    #         pisorec1 = ""
+    #     text_file.close()
 
     user = User(piso="admin", contrasenya=generate_password_hash("notadminpassword"))
     db.session.add(user)
