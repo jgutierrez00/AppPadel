@@ -16,7 +16,7 @@ dictF = {}
 invr1 = False
 invr2 = False
 
-diaselect = 0
+diaselect = ""
 
 piso = ""
 
@@ -32,7 +32,10 @@ def home():
     if request.method == "POST":
         if request.form.get("btnday"):
             global diaselect
+            print("entra")
+            print(diaselect)
             diaselect = request.form.get("btnday")
+            print(diaselect)
             return redirect(url_for("views.horarios"))
         elif request.form.get("1"):
             global invr1
@@ -70,13 +73,7 @@ def horarios():
         elif request.form.get("cbtn2"):
             eliminarReserva(piso, diaselect, "Pista2")
         elif request.form.get("gbbtn"):
-            return render_template(
-                "home.html",
-                keys=dictF.keys(),
-                reservas=reservas.values(),
-                user=current_user,
-            )
-
+            return redirect(url_for("views.home"))
     return render_template(
         "horarios.html",
         user=current_user,
@@ -129,9 +126,8 @@ def anyadirReserva(piso, pIdx, dia, pista):
         )
     else:
         global dictF
-        global reservas
         dictcpy = dictF.get(dia)
-        values = dictcpy[pista]
+        values = dictcpy.get(pista)
         hora = values[int(pIdx)][0]
         values[int(pIdx)][1] = piso
         dict = {pista: values}
@@ -139,13 +135,13 @@ def anyadirReserva(piso, pIdx, dia, pista):
         dictcpy2 = {dia: dictcpy}
         dictF.update(dictcpy2)
         rstr = ""
-        if info.reserva1info == None or info.reserva1info == "":
+        if info.reserva1info == None or info.reserva1info == "Sin reserva":
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
             info.reserva1info = rstr
 
-        elif info.reserva2info == None or info.reserva2info == "":
+        elif info.reserva2info == None or info.reserva2info == "Sin reserva":
             rstr += (
                 "Dia: " + str(dia) + " Pista: " + str(pista[-1]) + " Hora: " + str(hora)
             )
@@ -158,9 +154,7 @@ def anyadirReserva(piso, pIdx, dia, pista):
 
 def init():
     string = ""
-    cont = 0
-    for i in dias:
-        string = "dict" + str(cont)
+    for dia in dias:
         string = {
             "Pista1": [
                 ["10:00-11:15", "Libre"],
@@ -181,10 +175,11 @@ def init():
                 ["20:30-22:00", "Libre"],
             ],
         }
-        dictF.setdefault(i, string)
+        dictF.setdefault(dia, string)
 
 
 def updateReservas(piso):
+    global reservas
     user = User.query.filter_by(piso=piso).first()
     info = Information.query.filter_by(user_id=user.id).first()
     if info.reserva1info == None and info.reserva2info == None:
