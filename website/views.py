@@ -32,10 +32,7 @@ def home():
     if request.method == "POST":
         if request.form.get("btnday"):
             global diaselect
-            print("entra")
-            print(diaselect)
             diaselect = request.form.get("btnday")
-            print(diaselect)
             return redirect(url_for("views.horarios"))
 
     return render_template(
