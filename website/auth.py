@@ -24,7 +24,7 @@ def login():
         if user:
             if check_password_hash(user.contrasenya, psw):
                 # if checkIp(request.remote_addr, user.id) == True:
-                info = Information(user_id=user.id)
+                info = Information(user_id=user.id, bookedPA=0, bookedPB=0)
                 db.session.add(info)
                 db.session.commit()
                 flash("Sesion iniciada con exito", category="success")

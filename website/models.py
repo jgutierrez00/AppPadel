@@ -15,6 +15,8 @@ class Information(db.Model):
     numReservas = db.Column(db.Integer, default=0, nullable=False)
     reserva1info = db.Column(db.String(128))
     reserva2info = db.Column(db.String(128))
+    bookedPA = db.Column(db.Integer)
+    bookedPB = db.Column(db.Integer)
     user_id = db.Column(db.Integer, ForeignKey("user.id"))
 
 
