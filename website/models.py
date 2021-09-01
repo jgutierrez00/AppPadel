@@ -30,23 +30,23 @@ class User(db.Model, UserMixin):
 
 @event.listens_for(User.__table__, "after_create")
 def create_users(*args, **kwargs):
-    pisorec1 = ""
-    pisorec2 = ""
-    text_file = open("keys.txt", "w")
-    source = string.ascii_letters + string.digits
-    for i in range(10):
-        pisorec1 += "Portal " + str(i + 1)
-        for j in range(7):
-            pisorec2 = pisorec1 + " " + str(j + 1) + "º"
-            for k in range(5):
-                piso = pisorec2 + chr(65 + k)
-                key = "".join((random.choice(source) for i in range(8)))
-                text_file.write(piso + " " + key + "\n")
-                user = User(piso=piso, contrasenya=generate_password_hash(key))
-                db.session.add(user)
-            pisorec2 = ""
-        pisorec1 = ""
-    text_file.close()
+    # pisorec1 = ""
+    # pisorec2 = ""
+    # text_file = open("keys.txt", "w")
+    # source = string.ascii_letters + string.digits
+    # for i in range(10):
+    #     pisorec1 += "Portal " + str(i + 1)
+    #     for j in range(7):
+    #         pisorec2 = pisorec1 + " " + str(j + 1) + "º"
+    #         for k in range(5):
+    #             piso = pisorec2 + chr(65 + k)
+    #             key = "".join((random.choice(source) for i in range(8)))
+    #             text_file.write(piso + " " + key + "\n")
+    #             user = User(piso=piso, contrasenya=generate_password_hash(key))
+    #             db.session.add(user)
+    #         pisorec2 = ""
+    #     pisorec1 = ""
+    # text_file.close()
 
     user = User(piso="admin", contrasenya=generate_password_hash("notadminpassword"))
     db.session.add(user)

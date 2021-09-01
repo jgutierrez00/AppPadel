@@ -14,10 +14,9 @@
             {% for hora in horas %}
                 <tr>
                     <td style="text-align: center">{{hora}}</td>
+                    {% set idx = horas.index(hora) %}
                     {% for dia in dias %}
-                        {% set idx = 0 %}
                             <td style="text-align: center">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
-                        {% set idx = idx + 1 %}
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -36,10 +35,9 @@
             {% for hora in horas %}
                 <tr>
                     <td style="text-align: center">{{hora}}</td>
+                    {% set idx = horas.index(hora) %}
                     {% for dia in dias %}
-                        {% set idx = 0 %}
                             <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
-                        {% set idx = idx + 1 %}
                     {% endfor %}
                 </tr>
             {% endfor %}

@@ -93,6 +93,14 @@ def horarios():
     )
 
 
+@views.route("/calendar", methods=["GET"])
+def calendar():
+    print(dictF)
+    return render_template(
+        "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
+    )
+
+
 def eliminarReserva(piso, dia, pista):
     global dictF
     dictcpy = dictF.get(dia)
@@ -179,15 +187,6 @@ def anyadirReserva(piso, pIdx, dia, pista):
         db.session.commit()
         updateReservas(piso)
         flash("Reserva realizada con exito", category="success")
-
-
-@views.route("/calendar", methods=["GET"])
-def calendar():
-    if len(dictF) == 0:
-        init()
-    return render_template(
-        "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
-    )
 
 
 def init():

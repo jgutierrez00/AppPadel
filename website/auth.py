@@ -80,11 +80,6 @@ def changepassword():
     return render_template("changepassword.html", user=current_user)
 
 
-@auth.route("/calendar", methods=["GET"])
-def calendar():
-    return render_template("calendar.html", user=current_user)
-
-
 def checkIp(ip, id):
     info = User.query.filter_by(ip=ip).first()
     if info.ip == ip and info.numReservas > 0 and id != info.id:
