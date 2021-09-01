@@ -59,8 +59,8 @@ def changepassword():
     if request.method == "POST":
         if request.form.get("sbtn"):
             piso = request.form.get("piso")
-            psw1 = request.form.get("pws1")
-            psw2 = request.form.get("pws2")
+            psw1 = request.form.get("psw1")
+            psw2 = request.form.get("psw2")
             user = User.query.filter_by(piso=piso).first()
             if user:
                 if checkPassword(psw1, psw2):
@@ -78,6 +78,11 @@ def changepassword():
                 return render_template("changepassword.html", user=current_user)
 
     return render_template("changepassword.html", user=current_user)
+
+
+@auth.route("/calendar", methods=["GET"])
+def calendar():
+    return render_template("calendar.html", user=current_user)
 
 
 def checkIp(ip, id):

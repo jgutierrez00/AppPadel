@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Tabla de horarios{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center" id="timetableA" style="margin-top: 15px">
+    <table class="table table-dark table-sm">
+        <thead>
+            <th/>
+            {% for dia in dias %}
+                    <th style="text-align: center" scope="col">{{dia}}</th>
+            {% endfor %}
+        </thead>    
+        <tbody>
+            {% for hora in horas %}
+                <tr>
+                    <td style="text-align: center">{{hora}}</td>
+                    {% for dia in dias %}
+                        {% set idx = 0 %}
+                            <td style="text-align: center">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
+                        {% set idx = idx + 1 %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>     
+</div>
+<div class="d-flex justify-content-center" id="timetableB" style="margin-top: 15px">
+    <table class="table table-dark table-sm">
+        <thead>
+            <th/>
+            {% for dia in dias %}
+                    <th style="text-align: center" scope="col">{{dia}}</th>
+            {% endfor %}
+        </thead>    
+        <tbody>
+            {% for hora in horas %}
+                <tr>
+                    <td style="text-align: center">{{hora}}</td>
+                    {% for dia in dias %}
+                        {% set idx = 0 %}
+                            <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                        {% set idx = idx + 1 %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>     
+</div>
+{% endblock %}

@@ -7,6 +7,16 @@ from . import db
 
 views = Blueprint("views", __name__)
 
+horas = [
+    "10:00-11:15",
+    "11:15-12:30",
+    "12:30-13:45",
+    "13:45-15:00",
+    "17:00-18:30",
+    "18:30-20:30",
+    "20:30-22:00",
+]
+
 dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
 
 reservas = {"Reserva 1": "Sin reserva", "Reserva 2": "Sin reserva"}
@@ -169,6 +179,15 @@ def anyadirReserva(piso, pIdx, dia, pista):
         db.session.commit()
         updateReservas(piso)
         flash("Reserva realizada con exito", category="success")
+
+
+@views.route("/calendar", methods=["GET"])
+def calendar():
+    if len(dictF) == 0:
+        init()
+    return render_template(
+        "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
+    )
 
 
 def init():

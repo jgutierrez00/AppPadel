@@ -28,6 +28,7 @@
                     <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
                     {% else %}
                     <a class="nav-item nav-link" id="login" href="/login">Iniciar sesion</a>
+                    <a class="nav-item nav-link" id="calendar" href="/calendar">Horarios</a>
                     {% endif %}
                 </div>
             </div>
@@ -71,6 +72,6 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"
         ></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='javascript/scripts.js') }}"></script>
     </body>
 </html>
