@@ -25,8 +25,8 @@
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
                     <a class="nav-item nav-link" id="home" href="/">Inicio</a>
-                    <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
                     <a class="nav-item nav-link" id="calendar" href="/calendar">Tablon de horarios</a>
+                    <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
                     {% else %}
                     <a class="nav-item nav-link" id="login" href="/login">Iniciar sesion</a>
                     {% endif %}

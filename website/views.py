@@ -95,7 +95,6 @@ def horarios():
 
 @views.route("/calendar", methods=["GET"])
 def calendar():
-    print(dictF)
     return render_template(
         "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
     )
