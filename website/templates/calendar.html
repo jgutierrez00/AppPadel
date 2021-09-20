@@ -16,7 +16,11 @@
                     <td style="text-align: center">{{hora}}</td>
                     {% set idx = horas.index(hora) %}
                     {% for dia in dias %}
-                            <td style="text-align: center">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
+                        {% if dict.get(dia).get("PistaB")[idx][1] == 'Libre' %}
+                            <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                        {% else %}
+                            <td class="booked">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -37,7 +41,11 @@
                     <td style="text-align: center">{{hora}}</td>
                     {% set idx = horas.index(hora) %}
                     {% for dia in dias %}
+                        {% if dict.get(dia).get("PistaB")[idx][1] == 'Libre' %}
                             <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                        {% else %}
+                            <td class="booked">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
