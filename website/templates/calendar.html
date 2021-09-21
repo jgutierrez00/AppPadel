@@ -3,10 +3,10 @@
 {% block content %}
 <div id="parent">
     <div class="child" id="divbtn1">
-        <button type="button" id="btndisplay1" class="btn btn-outline-secondary d-flex justify-content-center">Pista A</button>
+        <button type="button" id="btndisplay1" class="btn btn-outline-secondary">Pista A</button>
     </div>
     <div class="child" id="divbtn2">
-        <button type="button" id="btndisplay2" class="btn btn-outline-secondary d-flex justify-content-center">Pista B</button>
+        <button type="button" id="btndisplay2" class="btn btn-outline-secondary">Pista B</button>
     </div>
 </div>
 <div class="hideBoxes" id="divttable1">
@@ -24,10 +24,10 @@
                         <td style="text-align: center">{{hora}}</td>
                         {% set idx = horas.index(hora) %}
                         {% for dia in dias %}
-                            {% if dict.get(dia).get("PistaB")[idx][1] == 'Libre' %}
-                                <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                            {% if dict.get(dia).get("PistaA")[idx][1] == 'Libre' %}
+                                <td style="text-align: center">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
                             {% else %}
-                                <td class="booked">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                                <td class="booked">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
