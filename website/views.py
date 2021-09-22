@@ -242,3 +242,13 @@ def checkAlreadyBooked(piso, pista):
             return False
         else:
             return True
+
+
+def reset():
+    infos = Information.query.all()
+    for info in infos:
+        info.numReservas = 0
+        info.reserva1Info = ""
+        info.reserva2Info = ""
+        info.bookedPA = 0
+        info.bookedPB = 0
