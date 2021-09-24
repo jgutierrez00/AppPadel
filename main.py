@@ -3,6 +3,7 @@ import threading
 from datetime import date
 import time
 from website.models import reset
+from website.views import condition_hour_checker
 
 app = create_app()
 
@@ -22,6 +23,7 @@ def condition_check_thread():
 
 if __name__ == "__main__":
     th = threading.Thread(name="checker", target=condition_check_thread)
+    td = threading.Thread(name="hourchecker", target=condition_hour_checker)
     th.setDaemon(True)
     th.start()
     app.run("localhost", debug=True)

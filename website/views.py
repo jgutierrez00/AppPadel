@@ -1,8 +1,9 @@
-from sqlalchemy.sql.expression import update
 from website.models import User, Information
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
+import datetime
+import time
 
 
 views = Blueprint("views", __name__)
@@ -193,22 +194,22 @@ def init():
     for dia in dias:
         string = {
             "PistaA": [
-                ["10:00-11:15", "Libre"],
-                ["11:15-12:30", "Libre"],
-                ["12:30-13:45", "Libre"],
-                ["13:45-15:00", "Libre"],
-                ["17:00-18:30", "Libre"],
-                ["18:30-20:30", "Libre"],
-                ["20:30-22:00", "Libre"],
+                ["10:00-11:15", "Libre", True],
+                ["11:15-12:30", "Libre", True],
+                ["12:30-13:45", "Libre", True],
+                ["13:45-15:00", "Libre", True],
+                ["17:00-18:30", "Libre", True],
+                ["18:30-20:30", "Libre", True],
+                ["20:30-22:00", "Libre", True],
             ],
             "PistaB": [
-                ["10:00-11:15", "Libre"],
-                ["11:15-12:30", "Libre"],
-                ["12:30-13:45", "Libre"],
-                ["13:45-15:00", "Libre"],
-                ["17:00-18:30", "Libre"],
-                ["18:30-20:30", "Libre"],
-                ["20:30-22:00", "Libre"],
+                ["10:00-11:15", "Libre", True],
+                ["11:15-12:30", "Libre", True],
+                ["12:30-13:45", "Libre", True],
+                ["13:45-15:00", "Libre", True],
+                ["17:00-18:30", "Libre", True],
+                ["18:30-20:30", "Libre", True],
+                ["20:30-22:00", "Libre", True],
             ],
         }
         dictF.setdefault(dia, string)
@@ -252,3 +253,29 @@ def reset():
         info.reserva2Info = ""
         info.bookedPA = 0
         info.bookedPB = 0
+    dictF.clear()
+    init()
+
+
+def condition_hour_checker():
+    while True:
+        d1 = datetime.datetime.now()
+        cont = 0
+        for horas in dictF.get("PistaA"):
+            if horas[2] == True:
+                if check_hora(horas[0], d1) == True:
+                    horas[2] = False
+                    dictF.get("PistaB")[cont][2] = False
+                break
+            cont = cont + 1
+
+        time.sleep(100000)
+
+
+def check_hora(h, hact):
+    hora = int(h[0:2])
+    min = int(h[3:5])
+    if hora == hact.hour and min == hact.min:
+        return True
+
+    return False
