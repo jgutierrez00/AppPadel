@@ -17,7 +17,7 @@
                             {% set idx = dias1.index(item)%}
                             {% if item[1] == 'Libre' %}
                                 <button type="submit" id="btn1" value={{idx}} name="btn1" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
-                            {% else if item[2] == False %}
+                            {% elif item[2] == False %}
                                 <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
                             {% else %}
                                 <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
@@ -40,7 +40,7 @@
                             {% set idx = dias2.index(item)%}
                             {% if item[1] == 'Libre' %}
                                 <button type="submit" id="btn2" value={{idx}} name="btn2" class="list-group-item list-group-item-success list-group-item-action">{{item[0]}} - {{item[1]}}</button>
-                            {% else if item[2] == False %}
+                            {% elif item[2] == False %}
                                 <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>
                             {% else %}
                                 <li class="list-group-item list-group-item-action disabled">{{item[0]}} - {{item[1]}}</li>

@@ -3,10 +3,12 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 import datetime
-import time
+from googletrans import Translator
 
 
 views = Blueprint("views", __name__)
+
+thread_active = False
 
 horas = [
     "10:00-11:15",
@@ -35,11 +37,11 @@ piso = ""
 @views.route("/", methods=["GET", "POST"])
 @login_required
 def home():
+    if len(dictF) == 0:
+        init()
     global piso
     piso = request.cookies.get("piso")
     updateReservas(piso)
-    if len(dictF) == 0:
-        init()
     if request.method == "POST":
         if request.form.get("btnday"):
             global diaselect
@@ -152,41 +154,44 @@ def anyadirReserva(piso, pIdx, dia, pista):
         dictcpy = dictF.get(dia)
         values = dictcpy.get(pista)
         hora = values[int(pIdx)][0]
-        values[int(pIdx)][1] = piso
-        dict = {pista: values}
-        dictcpy.update(dict)
-        dictcpy2 = {dia: dictcpy}
-        dictF.update(dictcpy2)
-        rstr = ""
-        if info.reserva1info == None or info.reserva1info == "Sin reserva":
-            rstr += (
-                "Dia: "
-                + str(dia)
-                + " - Pista: "
-                + str(pista[-1])
-                + " - Hora: "
-                + str(hora)
-            )
-            info.reserva1info = rstr
+        if check_hora(hora, datetime.datetime.today(), dia) == False:
+            flash("La hora seleccionada no esta disponible", category="error")
+        else:
+            values[int(pIdx)][1] = piso
+            dict = {pista: values}
+            dictcpy.update(dict)
+            dictcpy2 = {dia: dictcpy}
+            dictF.update(dictcpy2)
+            rstr = ""
+            if info.reserva1info == None or info.reserva1info == "Sin reserva":
+                rstr += (
+                    "Dia: "
+                    + str(dia)
+                    + " - Pista: "
+                    + str(pista[-1])
+                    + " - Hora: "
+                    + str(hora)
+                )
+                info.reserva1info = rstr
 
-        elif info.reserva2info == None or info.reserva2info == "Sin reserva":
-            rstr += (
-                "Dia: "
-                + str(dia)
-                + " - Pista: "
-                + str(pista[-1])
-                + " - Hora: "
-                + str(hora)
-            )
-            info.reserva2info = rstr
-        info.numReservas = info.numReservas + 1
-        if pista == "PistaA":
-            info.bookedPA = 1
-        elif pista == "PistaB":
-            info.bookedPB = 1
-        db.session.commit()
-        updateReservas(piso)
-        flash("Reserva realizada con exito", category="success")
+            elif info.reserva2info == None or info.reserva2info == "Sin reserva":
+                rstr += (
+                    "Dia: "
+                    + str(dia)
+                    + " - Pista: "
+                    + str(pista[-1])
+                    + " - Hora: "
+                    + str(hora)
+                )
+                info.reserva2info = rstr
+            info.numReservas = info.numReservas + 1
+            if pista == "PistaA":
+                info.bookedPA = 1
+            elif pista == "PistaB":
+                info.bookedPB = 1
+            db.session.commit()
+            updateReservas(piso)
+            flash("Reserva realizada con exito", category="success")
 
 
 def init():
@@ -257,25 +262,30 @@ def reset():
     init()
 
 
-def condition_hour_checker():
-    while True:
-        d1 = datetime.datetime.now()
-        cont = 0
-        for horas in dictF.get("PistaA"):
-            if horas[2] == True:
-                if check_hora(horas[0], d1) == True:
-                    horas[2] = False
-                    dictF.get("PistaB")[cont][2] = False
-                break
-            cont = cont + 1
-
-        time.sleep(100000)
-
-
-def check_hora(h, hact):
+def check_hora(h, hact, dia):
     hora = int(h[0:2])
     min = int(h[3:5])
-    if hora == hact.hour and min == hact.min:
-        return True
+    intdia = transform(dia)
+    if intdia >= hact.weekday():
+        if hora > hact.hour:
+            return True
+        elif hora == hact.hour:
+            if min >= hact.minute:
+                return True
 
     return False
+
+
+def transform(dia):
+    if dia == "Lunes":
+        return 0
+    elif dia == "Martes":
+        return 1
+    elif dia == "Miercoles":
+        return 2
+    elif dia == "Jueves":
+        return 3
+    elif dia == "Viernes":
+        return 4
+    elif dia == "Sabado":
+        return 5
