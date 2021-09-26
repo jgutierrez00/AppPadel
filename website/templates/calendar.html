@@ -25,7 +25,7 @@
                         {% set idx = horas.index(hora) %}
                         {% for dia in dias %}
                             {% if dict.get(dia).get("PistaA")[idx][1] == 'Libre' %}
-                                <td style="text-align: center">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
+                                <td style="text-align: center">-</td>
                             {% else %}
                                 <td class="booked">{{dict.get(dia).get("PistaA")[idx][1]}}</td>
                             {% endif %}
@@ -52,7 +52,7 @@
                         {% set idx = horas.index(hora) %}
                         {% for dia in dias %}
                             {% if dict.get(dia).get("PistaB")[idx][1] == 'Libre' %}
-                                <td style="text-align: center">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
+                                <td style="text-align: center">-</td>
                             {% else %}
                                 <td class="booked">{{dict.get(dia).get("PistaB")[idx][1]}}</td>
                             {% endif %}
@@ -64,6 +64,6 @@
     </div>
 </div>
 <div id="btnbacktt">
-    <button type="button" class="btn btn-secondary">Volver</button>
+    <button type="button" class="btn btn-primary">Volver</button>
 </div>
 {% endblock %}
