@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 import datetime
-from googletrans import Translator
 
 
 views = Blueprint("views", __name__)
@@ -122,9 +121,9 @@ def eliminarReserva(piso, dia, pista):
         dictF.update(dictcpy2)
         user = User.query.filter_by(piso=piso).first()
         info = Information.query.filter_by(user_id=user.id).first()
-        if info.reserva1info.split(" ")[1] == dia:
+        if info.reserva1info != None and info.reserva1info.split(" ")[1] == dia:
             info.reserva1info = None
-        elif info.reserva2info.split(" ")[1] == dia:
+        elif info.reserva2info != None and info.reserva2info.split(" ")[1] == dia:
             info.reserva2info = None
         info.numReservas = info.numReservas - 1
         if pista == "PistaA":
