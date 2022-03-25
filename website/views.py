@@ -3,11 +3,14 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import db
 import datetime
+import threading
 
 
 views = Blueprint("views", __name__)
 
 thread_active = False
+
+lockDict = threading.Lock()
 
 horas = [
     "10:00-11:15",
@@ -58,6 +61,7 @@ def horarios():
     piso = request.cookies.get("piso")
     if request.method == "POST":
         if request.form.get("btn1"):
+            lockDict.acquire()
             if not checkAlreadyBooked(piso, "PistaA"):
                 anyadirReserva(
                     piso,
@@ -69,7 +73,9 @@ def horarios():
                 flash(
                     "Usted ya ha realizado una reserva en la pista A", category="error"
                 )
+            lockDict.release()
         elif request.form.get("btn2"):
+            lockDict.acquire()
             if not checkAlreadyBooked(piso, "PistaB"):
                 anyadirReserva(
                     piso,
@@ -81,10 +87,15 @@ def horarios():
                 flash(
                     "Usted ya ha realizado una reserva en la pista B", category="error"
                 )
+            lockDict.release()
         elif request.form.get("cbtn1"):
+            lockDict.acquire()
             eliminarReserva(piso, diaselect, "PistaA")
+            lockDict.release()
         elif request.form.get("cbtn2"):
+            lockDict.acquire()
             eliminarReserva(piso, diaselect, "PistaB")
+            lockDict.release()
         elif request.form.get("gbbtn"):
             return redirect(url_for("views.home"))
     return render_template(
