@@ -26,14 +26,27 @@ def login():
             user = User.query.filter_by(piso=piso).first()
             if user:
                 if check_password_hash(user.contrasenya, psw):
-                    # if checkIp(request.remote_addr, user.id) == True:
-                    info = Information(user_id=user.id, bookedPA=0, bookedPB=0)
-                    db.session.add(info)
-                    db.session.commit()
-                    flash("Sesion iniciada con exito", category="success")
-                    login_user(user, remember=True)
                     resp = make_response(redirect(url_for("views.home")))
                     resp.set_cookie("piso", value=user.piso)
+                    info = Information.query.filter_by(user_id=user.id).first()
+                    # if checkIp(request.remote_addr, user.id) == True:
+                    if info == None or info == "":
+                        info = Information(
+                            user_id=user.id,
+                            bookedPA=0,
+                            bookedPB=0,
+                            reserva1info="Sin reserva",
+                            reserva2info="Sin reserva",
+                        )
+                        db.session.add(info)
+                        db.session.commit()
+                        resp.set_cookie("reserva1", value="Sin reserva")
+                        resp.set_cookie("reserva2", value="Sin reserva")
+                    else:
+                        resp.set_cookie("reserva1", value=info.reserva1info)
+                        resp.set_cookie("reserva2", value=info.reserva2info)
+                    flash("Sesion iniciada con exito", category="success")
+                    login_user(user, remember=True)
                     return resp
                 else:
                     flash("La contraseña es incorrecta", category="error")

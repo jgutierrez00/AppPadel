@@ -1,5 +1,13 @@
 from website.models import User, Information
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    flash,
+    redirect,
+    url_for,
+    make_response,
+)
 from flask_login import login_required, current_user
 from . import db
 import datetime
@@ -24,8 +32,6 @@ horas = [
 
 dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
 
-reservas = {"Reserva 1": "Sin reserva", "Reserva 2": "Sin reserva"}
-
 dictF = {}
 
 invr1 = False
@@ -43,16 +49,14 @@ def home():
         init()
     global piso
     piso = request.cookies.get("piso")
-    updateReservas(piso)
+    # updateReservas(piso)
     if request.method == "POST":
         if request.form.get("btnday"):
             global diaselect
             diaselect = request.form.get("btnday")
             return redirect(url_for("views.horarios"))
 
-    return render_template(
-        "home.html", keys=dictF.keys(), reservas=reservas.values(), user=current_user
-    )
+    return render_template("home.html", keys=dictF.keys(), user=current_user)
 
 
 @views.route("/horarios", methods=["GET", "POST"])
@@ -60,15 +64,15 @@ def home():
 def horarios():
     piso = request.cookies.get("piso")
     if request.method == "POST":
+        response = make_response(redirect(url_for("views.horarios")))
         if request.form.get("btn1"):
             lockDict.acquire()
             if not checkAlreadyBooked(piso, "PistaA"):
                 anyadirReserva(
-                    piso,
-                    request.form.get("btn1"),
-                    diaselect,
-                    "PistaA",
+                    piso, request.form.get("btn1"), diaselect, "PistaA", response
                 )
+                lockDict.release()
+                return response
             else:
                 flash(
                     "Usted ya ha realizado una reserva en la pista A", category="error"
@@ -78,11 +82,10 @@ def horarios():
             lockDict.acquire()
             if not checkAlreadyBooked(piso, "PistaB"):
                 anyadirReserva(
-                    piso,
-                    request.form.get("btn2"),
-                    diaselect,
-                    "PistaB",
+                    piso, request.form.get("btn2"), diaselect, "PistaB", response
                 )
+                lockDict.release()
+                return response
             else:
                 flash(
                     "Usted ya ha realizado una reserva en la pista B", category="error"
@@ -90,14 +93,17 @@ def horarios():
             lockDict.release()
         elif request.form.get("cbtn1"):
             lockDict.acquire()
-            eliminarReserva(piso, diaselect, "PistaA")
+            eliminarReserva(piso, diaselect, "PistaA", response)
             lockDict.release()
+            return response
         elif request.form.get("cbtn2"):
             lockDict.acquire()
-            eliminarReserva(piso, diaselect, "PistaB")
+            eliminarReserva(piso, diaselect, "PistaB", response)
             lockDict.release()
+            return response
         elif request.form.get("gbbtn"):
             return redirect(url_for("views.home"))
+
     return render_template(
         "horarios.html",
         user=current_user,
@@ -113,7 +119,7 @@ def calendar():
     )
 
 
-def eliminarReserva(piso, dia, pista):
+def eliminarReserva(piso, dia, pista, response):
     global dictF
     dictcpy = dictF.get(dia)
     values = dictcpy[pista]
@@ -125,7 +131,6 @@ def eliminarReserva(piso, dia, pista):
             exit = True
         cont = cont + 1
     if exit == True:
-        global reservas
         dict = {pista: values}
         dictcpy.update(dict)
         dictcpy2 = {dia: dictcpy}
@@ -134,15 +139,16 @@ def eliminarReserva(piso, dia, pista):
         info = Information.query.filter_by(user_id=user.id).first()
         if info.reserva1info != None and info.reserva1info.split(" ")[1] == dia:
             info.reserva1info = None
+            response.set_cookie("reserva1", "Sin reserva")
         elif info.reserva2info != None and info.reserva2info.split(" ")[1] == dia:
             info.reserva2info = None
+            response.set_cookie("reserva2", "Sin reserva")
         info.numReservas = info.numReservas - 1
         if pista == "PistaA":
             info.bookedPA = 0
         elif pista == "PistaB":
             info.bookedPB = 0
         db.session.commit()
-        updateReservas(piso)
         flash("Reserva eliminada con exito", category="success")
     else:
         flash(
@@ -151,7 +157,7 @@ def eliminarReserva(piso, dia, pista):
         )
 
 
-def anyadirReserva(piso, pIdx, dia, pista):
+def anyadirReserva(piso, pIdx, dia, pista, response):
     user = User.query.filter_by(piso=piso).first()
     info = Information.query.filter_by(user_id=user.id).first()
     if info.numReservas == 2:
@@ -183,7 +189,7 @@ def anyadirReserva(piso, pIdx, dia, pista):
                     + str(hora)
                 )
                 info.reserva1info = rstr
-
+                response.set_cookie("reserva1", rstr)
             elif info.reserva2info == None or info.reserva2info == "Sin reserva":
                 rstr += (
                     "Dia: "
@@ -194,13 +200,13 @@ def anyadirReserva(piso, pIdx, dia, pista):
                     + str(hora)
                 )
                 info.reserva2info = rstr
+                response.set_cookie("reserva2", rstr)
             info.numReservas = info.numReservas + 1
             if pista == "PistaA":
                 info.bookedPA = 1
             elif pista == "PistaB":
                 info.bookedPB = 1
             db.session.commit()
-            updateReservas(piso)
             flash("Reserva realizada con exito", category="success")
 
 
@@ -228,21 +234,6 @@ def init():
             ],
         }
         dictF.setdefault(dia, string)
-
-
-def updateReservas(piso):
-    global reservas
-    user = User.query.filter_by(piso=piso).first()
-    info = Information.query.filter_by(user_id=user.id).first()
-    if info.reserva1info == None and info.reserva2info == None:
-        dict = {"Reserva 1": "Sin reserva", "Reserva 2": "Sin reserva"}
-    elif info.reserva1info == None and info.reserva2info != None:
-        dict = {"Reserva 1": "Sin reserva", "Reserva 2": info.reserva2info}
-    elif info.reserva1info != None and info.reserva2info == None:
-        dict = {"Reserva 1": info.reserva1info, "Reserva 2": "Sin reserva"}
-    else:
-        dict = {"Reserva 1": info.reserva1info, "Reserva 2": info.reserva2info}
-    reservas.update(dict)
 
 
 def checkAlreadyBooked(piso, pista):
@@ -276,13 +267,16 @@ def check_hora(h, hact, dia):
     hora = int(h[0:2])
     min = int(h[3:5])
     intdia = transform(dia)
-    if intdia >= hact.weekday():
+    if intdia > hact.weekday():
+        return True
+    elif intdia == hact.weekday():
         if hora > hact.hour:
             return True
         elif hora == hact.hour:
             if min >= hact.minute:
                 return True
-
+        else:
+            return False
     return False
 
 

@@ -19,4 +19,10 @@ Tasks:
     ✔ Hacer reset de app los sabados @done(21-09-22 12:29)
     ✔ Arreglar botones de los horarios @done(21-09-22 12:29)
     ✔ Hacer que pasado el dia u hora, no deje pulsar los botones correspondientes @done(21-09-26 10:24)    
-
+    ☐ Hacer que al cerrar el navegador, cierre la sesion.
+    ☐ Usar async para actualizacion en caso de tener dos o mas usuarios dentro de la pagina.
+    ✔ He puesto cookies para obtener la reserva y enseñarlas en la pagina. Necesito poder obtener el valor del array de strings para poder mostrarla. @done(22-03-29 13:03)
+    ✔ Ajustar login div. @done(22-03-29 14:04)
+    ☐ Meter mas transiciones para el calendario y demas
+    ☐ Ajustar cosas para moviles y tabletas (Algunos no funcionan).
+    ☐ Actualizar lista cuando el tiempo para reserva se halla pasado.
