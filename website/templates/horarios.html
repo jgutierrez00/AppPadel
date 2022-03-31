@@ -9,7 +9,7 @@
             <div class="col-sm">
                 <label for="firstform" class="display-4" style="margin-left: 4.5vw">Pista A</label>
                 <form id="firstform" method="POST">
-                    <ul class="list-group">
+                    <ul class="list-group" id="listPA">
                         {% for item in dias1 %}
                             {% set idx = dias1.index(item)%}
                             {% if item[1] == 'Libre' %}
@@ -27,7 +27,7 @@
             <div class="col-sm">
                 <label for="secondform" class="display-4" style="margin-left: 4.5vw">Pista B</label>
                 <form id="secondform" method="POST">
-                    <ul class="list-group">
+                    <ul class="list-group" id="listPB">
                         {% for item in dias2 %}
                             {% set idx = dias2.index(item)%}
                             {% if item[1] == 'Libre' %}

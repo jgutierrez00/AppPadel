@@ -16,8 +16,6 @@ import threading
 
 views = Blueprint("views", __name__)
 
-thread_active = False
-
 lockDict = threading.Lock()
 
 horas = [
@@ -49,12 +47,13 @@ def home():
         init()
     global piso
     piso = request.cookies.get("piso")
-    # updateReservas(piso)
     if request.method == "POST":
         if request.form.get("btnday"):
             global diaselect
             diaselect = request.form.get("btnday")
-            return redirect(url_for("views.horarios"))
+            resp = make_response(redirect(url_for("views.horarios")))
+            resp.set_cookie("dia", diaselect)
+            return resp
 
     return render_template("home.html", keys=dictF.keys(), user=current_user)
 
@@ -114,6 +113,10 @@ def horarios():
 
 @views.route("/calendar", methods=["GET"])
 def calendar():
+    flash(
+        "Si se encuentra en un dispositivo móvil, cambie la orientación a horizontal para tener una mejor vista",
+        category="success",
+    )
     return render_template(
         "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
     )

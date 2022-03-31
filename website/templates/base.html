@@ -23,25 +23,18 @@
                 display: none;
             }
             #btndisplay1 {
-                margin-top: 200px;
-                margin-left: 300px;
-                padding-left: 100px;
-                padding-top: 100px;
-                padding-bottom: 100px;
-                padding-right: 100px;
+                padding: 5vw 5vw 5vw 5vw;
             }
             #btndisplay2 {
-                margin-top: 200px;
-                padding-left: 100px;
-                padding-top: 100px;
-                padding-bottom: 100px;
-                padding-right: 100px;
+                padding: 5vw 5vw 5vw 5vw;
             }
             #parent{
                 white-space: nowrap;
             }
             .child {
                 display: inline-block;
+                margin-top: 30vh;
+                margin-left: 21%;
             }
             #btnbacktt {
                 margin-top: 100px;
@@ -52,18 +45,18 @@
         <title>{% block title %}Home{% endblock %}</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
                 <span class="navbar-toggler-icon"/>
             </button>
             <div class="collapse navbar-collapse" id="navbar">
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <a class="nav-item nav-link" id="home" href="/">Inicio</a>
-                    <a class="nav-item nav-link" id="calendar" href="/calendar">Tablon de horarios</a>
-                    <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
+                        <a class="nav-item nav-link" id="home" href="/">Inicio</a>
+                        <a class="nav-item nav-link" id="calendar" href="/calendar">Tablon de horarios</a>
+                        <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
                     {% else %}
-                    <a class="nav-item nav-link" id="login" href="/login">Iniciar sesion</a>
+                        <a class="nav-item nav-link" id="login" href="/login">Iniciar sesion</a>
                     {% endif %}
                 </div>
             </div>
