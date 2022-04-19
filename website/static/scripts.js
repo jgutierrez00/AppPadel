@@ -23,17 +23,19 @@ function checkDay(){
 }
 
 function checkHour(hour, min){
-  var realH = new Date().getHours();
+  let realH = new Date().getHours();
+  let realM = new Date().getMinutes();
   if(hour < realH){
     return false;
   }else if(hour == realH){
-    if(min < new Date().getMinutes()){
+    if(min < realM){
       return false;
     }else{
       return true;
     }
+  }else{
+    return true;
   }
-  return hour < realH;
 }
 
 function filterText(text){
@@ -45,30 +47,23 @@ function filterText(text){
 
 function changeBooks(checkHours){
   const arrayPA = document.getElementById("listPA").getElementsByTagName("button");
-  const arrayPB = document.getElementById("listPB").getElementsByTagName("button")
+  const arrayPB = document.getElementById("listPB").getElementsByTagName("button");
   if(!checkHours){
-    Object.values(arrayPA).forEach(function(elem){
-      elem.outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>"
-    })
-    Object.values(arrayPB).forEach(function(elem){
-      elem.outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>"
-    })
+    for(let i=arrayPA.length-1; i>=0; i--){
+      arrayPA.item(i).outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>";
+      arrayPB.item(i).outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>";
+    }
   }else{
-    Object.values(arrayPA).forEach(function(elem){
-      let time = filterText(elem.innerHTML);
+    const length = arrayPA.length;
+    for(let i=0; i<length; i++){
+      let time = filterText(arrayPB.item(0).innerHTML);
       if(!checkHour(time[0], time[1])){
-        elem.outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>"
+        arrayPB.item(0).outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>";
+        arrayPA.item(0).outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>";
       }
-    }) 
-    Object.values(arrayPB).forEach(function(elem){
-      let time = filterText(elem.innerHTML);
-      if(!checkHour(time[0], time[1])){
-        elem.outerHTML = "<li class=\"list-group-item list-group-item-action disabled\">Hora no disponible</li>"
-      }
-    })
+    }
   }
 }
-
 
 function removePossibleBooks(){
   if(checkDay() == -1){
@@ -121,7 +116,8 @@ $(function () {
   $('#flash').delay(500).fadeIn('normal', function () {
     $(this).delay(2500).fadeOut();
   });
-  if(window.location.href == "http://localhost:5000/horarios"){
+  var regex = new RegExp("\/horarios");
+  if(regex.test(window.location.href)){
     asyncCall();  
   }
 });
@@ -133,14 +129,14 @@ $(document).ready(function(){
   r1 = r1.substring(1, r1.length-1)
   r2 = r2.substring(1, r2.length-1)
   if(r1 != ""){
-    document.getElementById("reserva1").innerHTML = "<li class=\"list-group-item\" id=\"reserva1\">" + r1 +"</li>";
+    document.getElementById("reserva1").innerHTML = r1;
   }else{
-    document.getElementById("reserva1").innerHTML = "<li class=\"list-group-item\" id=\"reserva1\">Sin reserva</li>";
+    document.getElementById("reserva1").innerHTML = "Sin reserva";
   }
   if(r2 != ""){
-    document.getElementById("reserva2").innerHTML = "<li class=\"list-group-item\" id=\"reserva1\">" + r2 +"</li>";
+    document.getElementById("reserva2").innerHTML = r2;
   }else{
-    document.getElementById("reserva2").innerHTML = "<li class=\"list-group-item\" id=\"reserva1\">Sin reserva</li>";
+    document.getElementById("reserva2").innerHTML = "Sin reserva";
   }
 });
 
@@ -150,14 +146,14 @@ document.getElementById('btndisplay1').addEventListener('click', function () {
   document.getElementById('btndisplay2').style.display = 'none';
   document.getElementById('divttable1').style.display = 'block';
   document.getElementById('btnbacktt').style.display = 'block';
-})
+});
 
 document.getElementById('btndisplay2').addEventListener('click', function () {
   document.getElementById('btndisplay1').style.display = 'none';
   document.getElementById('btndisplay2').style.display = 'none';
   document.getElementById('divttable2').style.display = 'block';
   document.getElementById('btnbacktt').style.display = 'block';
-})
+});
 
 document.getElementById('btnbacktt').addEventListener('click', function () {
   document.getElementById('btnbacktt').style.display = 'none';
@@ -165,4 +161,6 @@ document.getElementById('btnbacktt').addEventListener('click', function () {
   document.getElementById('divttable2').style.display = 'none'
   document.getElementById('btndisplay1').style.display = 'inline-block';
   document.getElementById('btndisplay2').style.display = 'inline-block';
-})
+});
+
+toggleSwitch.addEventListener('change', switchTheme, false);

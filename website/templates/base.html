@@ -14,6 +14,7 @@
             href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
             crossorigin="anonymous"
         >
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <style>
             .booked {
                 color: red;
@@ -44,21 +45,20 @@
         </style>
         <title>{% block title %}Home{% endblock %}</title>
     </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
-                <span class="navbar-toggler-icon"/>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <div class="navbar-nav">
-                    {% if user.is_authenticated %}
-                        <a class="nav-item nav-link" id="home" href="/">Inicio</a>
-                        <a class="nav-item nav-link" id="calendar" href="/calendar">Tablon de horarios</a>
-                        <a class="nav-item nav-link" id="logout" href="/logout">Cerrar sesion</a>
-                    {% else %}
-                        <a class="nav-item nav-link" id="login" href="/login">Iniciar sesion</a>
-                    {% endif %}
-                </div>
+    <body class="darkmodeBody">
+        <nav class="navbar navbar-expand-md">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" id="home" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="calendar" href="/calendar">Tablon de horarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="logout" href="/logout">Cerrar sesion</a>
+                    </li>
+                </ul>
             </div>
         </nav>
         {% with messages = get_flashed_messages(with_categories=true) %}

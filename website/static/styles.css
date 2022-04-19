@@ -1,11 +1,51 @@
-@media only screen and (max-width: 3840px){
-
+:root {
+  --font-color: #0f0f0f;
+  --bg-color: #fefefe;
 }
 
-@media only screen and (max-width: 1920px){
-  body{
-    width: 100%;
-    height: 100%;
-  }
+body {
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  max-width: 100%;
+  font-size: calc(1rem + 0.25vh);
 }
 
+h1 {
+  color: var(--heading-color);
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.6rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+a:hover, a:focus {
+  border-bottom: 3px solid currentColor;
+}
+
+section {
+  max-width: 68%;
+  margin: 0 auto;
+}
+
+.post-meta {
+  font-size: 1rem;
+  display: block;
+  color: var(--secondary-color);
+}
+
+nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
