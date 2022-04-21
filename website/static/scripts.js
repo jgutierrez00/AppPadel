@@ -114,7 +114,7 @@ function transform(day){
 
 $(function () {
   $('#flash').delay(500).fadeIn('normal', function () {
-    $(this).delay(2500).fadeOut();
+    $(this).delay(3000).fadeOut();
   });
   var regex = new RegExp("\/horarios");
   if(regex.test(window.location.href)){
@@ -124,6 +124,9 @@ $(function () {
 
 
 $(document).ready(function(){
+  if(window.location.href.indexOf("/calendar") > -1) {
+    
+  }
   var r1 = getCookie("reserva1");
   var r2 = getCookie("reserva2");
   r1 = r1.substring(1, r1.length-1)
@@ -156,11 +159,37 @@ document.getElementById('btndisplay2').addEventListener('click', function () {
 });
 
 document.getElementById('btnbacktt').addEventListener('click', function () {
+  document.getElementById('btnbacktt').animate([
+    {opacity: '100%'},
+    {opacity: '0%'}
+  ], {
+    duration: 600,
+  });
+  document.getElementById('divttable1').animate([
+    {opacity: '100%'},
+    {opacity: '0%'}
+  ], {
+    duration: 600,
+  });
+  setTimeout(showBack, 600);
+});
+
+function showBack(){
   document.getElementById('btnbacktt').style.display = 'none';
   document.getElementById('divttable1').style.display = 'none'
   document.getElementById('divttable2').style.display = 'none'
+  document.getElementById('divbtndis1').animate([
+    {left: '-50vw'},
+    {left: '0vw'}
+  ], {
+    duration: 600,
+  });
+  document.getElementById('divbtndis2').animate([
+    {right: '-50vw'},
+    {opacity: '0vw'}
+  ], {
+    duration: 600,
+  });
   document.getElementById('btndisplay1').style.display = 'inline-block';
   document.getElementById('btndisplay2').style.display = 'inline-block';
-});
-
-toggleSwitch.addEventListener('change', switchTheme, false);
+}
