@@ -28,4 +28,5 @@ Tasks:
     ✔ Lista se actualiza y restringe las horas ya pasadas. En caso de que todas hayan pasado solo cambia una cuantas, arreglar. @done(22-03-31 19:47)
     ✔ No se estan actualizando las horas bien. Hoy es viernes y aparecen todas como "no disponibles". Arreglar. @done(22-04-19 15:01)
     ✔ Mover slider darkmode a la derecha. @done(22-04-01 11:53)
-    ☐ Eliminar sitio no seguro. Necesita SSL para eliminarlo y cuesta dinero.
+    ☐ Eliminar sitio no seguro. Necesita TLS para eliminarlo y cuesta dinero.
+    ☐ Navbar esta fucked. No se colapsa cuando esta en movil. Ahora tengo dos dilemas. :(

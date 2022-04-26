@@ -124,6 +124,7 @@ $(function () {
 
 
 $(document).ready(function(){
+  debugCookies();
   if(window.location.href.indexOf("/calendar") > -1) {
     
   }
@@ -192,4 +193,10 @@ function showBack(){
   });
   document.getElementById('btndisplay1').style.display = 'inline-block';
   document.getElementById('btndisplay2').style.display = 'inline-block';
+}
+
+function debugCookies(){
+  for(let i=0; i<cookies.length; i++){
+    console.log(cookies.getCookie(cookies[i]));
+  }
 }
