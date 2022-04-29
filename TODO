@@ -24,9 +24,9 @@ Tasks:
     ✔ He puesto cookies para obtener la reserva y enseñarlas en la pagina. Necesito poder obtener el valor del array de strings para poder mostrarla. @done(22-03-29 13:03)
     ✔ Ajustar login div. @done(22-03-29 14:04)
     ✔ Meter mas transiciones para el calendario y demas @done(22-04-21 13:19)
-    ☐ Funcionan en moviles pero hay que ajustarlo para que dependa de un div, y no del body.
+    ✔ Reajustar todas las paginas para que quepan en movil. A partir de ahi usar maxwidth para ajustar la version desktop. @done(22-04-29 10:14)
     ✔ Lista se actualiza y restringe las horas ya pasadas. En caso de que todas hayan pasado solo cambia una cuantas, arreglar. @done(22-03-31 19:47)
     ✔ No se estan actualizando las horas bien. Hoy es viernes y aparecen todas como "no disponibles". Arreglar. @done(22-04-19 15:01)
     ✔ Mover slider darkmode a la derecha. @done(22-04-01 11:53)
     ☐ Eliminar sitio no seguro. Necesita TLS para eliminarlo y cuesta dinero.
-    ☐ Navbar esta fucked. No se colapsa cuando esta en movil. Ahora tengo dos dilemas. :(
+    ✔ Navbar esta fucked. No se colapsa cuando esta en movil. Ahora tengo dos dilemas. @done(22-04-26 13:37)

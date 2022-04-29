@@ -124,10 +124,6 @@ $(function () {
 
 
 $(document).ready(function(){
-  debugCookies();
-  if(window.location.href.indexOf("/calendar") > -1) {
-    
-  }
   var r1 = getCookie("reserva1");
   var r2 = getCookie("reserva2");
   r1 = r1.substring(1, r1.length-1)

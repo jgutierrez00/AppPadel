@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 :root {
   --font-color: #0f0f0f;
   --bg-color: #fefefe;
@@ -7,12 +11,12 @@ body {
   background-color: var(--bg-color);
   color: var(--font-color);
   max-width: 100%;
-  font-size: calc(1rem + 0.25vh);
+  margin: 0;
 }
 
 h1 {
   color: var(--heading-color);
-  font-size: 2rem;
+  font-size: 1.25rem;
 }
 
 p {
@@ -104,6 +108,26 @@ nav {
   margin-left: 21%;
 }
 
+#title{
+  padding-top: 20px;
+}
+
+#buttonsForm #sbtn{
+  margin-left: 5.5vw;
+}
+
+#secondTT{
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.btnCalendar{
+  padding: 5vw;
+}
+
+#buttonsFormTT .btnFS{
+  font-size: 0.97rem;
+}
 #divbtndis1{
   position: relative;
   left: 0vw;
@@ -114,6 +138,12 @@ nav {
   position: relative;
   right: 0vw;
   animation: ktraslation2 1s;
+}
+
+#btnbacktt {
+  margin-top: 100px;
+  margin-left: 35vw;
+  display: none;
 }
 
 @keyframes ktraslation1 {
@@ -131,8 +161,9 @@ nav {
   to {opacity: 100%;}
 }
 
-#btnbacktt {
-  margin-top: 100px;
-  margin-left: 525px;
+#alert{
   display: none;
+  text-align: center;
+  padding-top: 10px;
 }
+

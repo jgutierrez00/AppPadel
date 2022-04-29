@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-center">
-    <h3 class="display-4">Inicio de sesion</h3>
+    <h3 id="title">Inicio de sesion</h3>
 </div>
 <br/>
 <div class="dflex justify-content-center">
@@ -17,8 +17,10 @@
             <input type="password" class="form-control" value="" id="psw" name="psw" placeholder="Introduzca su contraseña">
         </div>
         <br />
-        <button type="submit" id="sbtn" name="sbtn" value="sbtn" class="btn btn-primary">Iniciar Sesion</button>
-        <button type="submit" id="cpswbtn" name="cpswbtn" value="cbtn" class="btn btn-secondary" style="margin-left: 15px">Cambiar contrase&ntilde;a</button>
+        <div id="buttonsForm">
+            <button type="submit" id="sbtn" name="sbtn" value="sbtn" class="btn btn-primary">Iniciar Sesion</button>
+            <button type="submit" id="cpswbtn" name="cpswbtn" value="cbtn" class="btn btn-secondary" style="margin-left: 15px">Cambiar contrase&ntilde;a</button>
+        </div>
     </form>
 </div>
 {% endblock %}
