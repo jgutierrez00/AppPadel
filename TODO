@@ -30,3 +30,5 @@ Tasks:
     ✔ Mover slider darkmode a la derecha. @done(22-04-01 11:53)
     ☐ Eliminar sitio no seguro. Necesita TLS para eliminarlo y cuesta dinero.
     ✔ Navbar esta fucked. No se colapsa cuando esta en movil. Ahora tengo dos dilemas. @done(22-04-26 13:37)
+    ✔ El calendario funciona para moviles y desktops. Los botones tienen mal la posicion cuando la resolucion es mayor que 720. @done(22-04-30 17:54)
+    

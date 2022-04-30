@@ -113,10 +113,6 @@ def horarios():
 
 @views.route("/calendar", methods=["GET"])
 def calendar():
-    flash(
-        "Si se encuentra en un dispositivo móvil, cambie la orientación a horizontal para tener una mejor vista",
-        category="success",
-    )
     return render_template(
         "calendar.html", user=current_user, dias=dias, dict=dictF, horas=horas
     )

@@ -98,14 +98,14 @@ nav {
   animation: opacityT1 1s;
 }
 
-.parent{
+#parent{
   white-space: nowrap;
+  margin-top: 30vh;
 }
 
 .child {
   display: inline-block;
-  margin-top: 30vh;
-  margin-left: 21%;
+  margin: 0 auto;
 }
 
 #title{
@@ -113,7 +113,7 @@ nav {
 }
 
 #buttonsForm #sbtn{
-  margin-left: 5.5vw;
+  margin-left: 3vw;
 }
 
 #secondTT{
@@ -128,15 +128,16 @@ nav {
 #buttonsFormTT .btnFS{
   font-size: 0.97rem;
 }
+
 #divbtndis1{
   position: relative;
-  left: 0vw;
+  left: 15vw;
   animation: ktraslation1 1s;
 }
 
 #divbtndis2{
   position: relative;
-  right: 0vw;
+  right: -25vw;
   animation: ktraslation2 1s;
 }
 
@@ -147,13 +148,13 @@ nav {
 }
 
 @keyframes ktraslation1 {
-  from {left: -50vw}
-  to {left: 0vw}
+  from {left: -100vw}
+  to {left: 15vw}
 }
 
 @keyframes ktraslation2 {
-  from {right: -50vw}
-  to {right: 0vw}
+  from {right: -100vw}
+  to {right: -25vw}
 }
 
 @keyframes opacityT1 {
@@ -167,3 +168,92 @@ nav {
   padding-top: 10px;
 }
 
+@media (min-height: 720px){
+
+  #secondTT{
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  #divbtndis1{
+    position: relative;
+    left: 25vw;
+    animation: ktraslation1 1s;
+  }
+  
+  #divbtndis2{
+    position: relative;
+    right: -35vw;
+    animation: ktraslation2 1s;
+  }
+
+  #btnbacktt {
+    margin-top: 100px;
+    margin-left: 42vw;
+    display: none;
+  }
+
+  #buttonsForm #sbtn{
+    margin-left: 0vw;
+  }
+
+  @keyframes ktraslation1 {
+    from {left: -50vw}
+    to {left: 25vw}
+  }
+  
+  @keyframes ktraslation2 {
+    from {right: -100vw}
+    to {right: -35vw}
+  }
+  
+  @keyframes opacityT1 {
+    from {opacity: 0%;}
+    to {opacity: 100%;}
+  }
+}
+
+@media (min-height: 1080px){
+
+  #secondTT{
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  #divbtndis1{
+    position: relative;
+    left: 10vw;
+    animation: ktraslation1 1s;
+  }
+  
+  #divbtndis2{
+    position: relative;
+    right: -25vw;
+    animation: ktraslation2 1s;
+  }
+
+  #btnbacktt {
+    margin-top: 100px;
+    margin-left: 28vw;
+    display: none;
+  }
+
+  #buttonsForm #sbtn{
+    margin-left: 0vw;
+  }
+
+  @keyframes ktraslation1 {
+    from {left: -50vw}
+    to {left: 10vw}
+  }
+  
+  @keyframes ktraslation2 {
+    from {right: -100vw}
+    to {right: -25vw}
+  }
+  
+  @keyframes opacityT1 {
+    from {opacity: 0%;}
+    to {opacity: 100%;}
+  }
+}
