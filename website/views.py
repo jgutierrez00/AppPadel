@@ -65,31 +65,45 @@ def horarios():
     if request.method == "POST":
         response = make_response(redirect(url_for("views.horarios")))
         if request.form.get("btn1"):
-            lockDict.acquire()
-            if not checkAlreadyBooked(piso, "PistaA"):
-                anyadirReserva(
-                    piso, request.form.get("btn1"), diaselect, "PistaA", response
-                )
+            if checkBooks("PistaA", request.form.get("btn1"), diaselect) == True:
+                lockDict.acquire()
+                if not checkAlreadyBooked(piso, "PistaA"):
+                    anyadirReserva(
+                        piso, request.form.get("btn1"), diaselect, "PistaA", response
+                    )
+                    lockDict.release()
+                    return response
+                else:
+                    flash(
+                        "Usted ya ha realizado una reserva en la pista A",
+                        category="error",
+                    )
                 lockDict.release()
-                return response
             else:
                 flash(
-                    "Usted ya ha realizado una reserva en la pista A", category="error"
+                    "Si le ha saltado este error es porque se ha intentado reservar a la vez, la misma hora. El servidor ha escogido como reserva la peticion más rápida. Disculpe las molestias.",
+                    category="error",
                 )
-            lockDict.release()
         elif request.form.get("btn2"):
-            lockDict.acquire()
-            if not checkAlreadyBooked(piso, "PistaB"):
-                anyadirReserva(
-                    piso, request.form.get("btn2"), diaselect, "PistaB", response
-                )
+            if checkBooks("PistaB", request.form.get("btn2"), diaselect) == True:
+                lockDict.acquire()
+                if not checkAlreadyBooked(piso, "PistaB"):
+                    anyadirReserva(
+                        piso, request.form.get("btn2"), diaselect, "PistaB", response
+                    )
+                    lockDict.release()
+                    return response
+                else:
+                    flash(
+                        "Usted ya ha realizado una reserva en la pista B",
+                        category="error",
+                    )
                 lockDict.release()
-                return response
             else:
                 flash(
-                    "Usted ya ha realizado una reserva en la pista B", category="error"
+                    "Si le ha saltado este error es porque se ha intentado reservar a la vez, la misma hora. El servidor ha escogido como reserva la peticion más rápida. Disculpe las molestias.",
+                    category="error",
                 )
-            lockDict.release()
         elif request.form.get("cbtn1"):
             lockDict.acquire()
             eliminarReserva(piso, diaselect, "PistaA", response)
@@ -248,6 +262,13 @@ def checkAlreadyBooked(piso, pista):
             return False
         else:
             return True
+
+
+def checkBooks(pista, pIdx, dia):
+    global dictF
+    dictcpy = dictF.get(dia)
+    values = dictcpy.get(pista)
+    return values[int(pIdx)][1] == "Libre"
 
 
 def reset():

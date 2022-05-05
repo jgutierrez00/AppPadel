@@ -24,4 +24,4 @@ if __name__ == "__main__":
     th = threading.Thread(name="checker", target=condition_check_thread)
     th.setDaemon(True)
     th.start()
-    app.run("localhost", debug=True)
+    app.run("192.168.43.135", threaded=True, debug=True)

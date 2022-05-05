@@ -20,7 +20,7 @@ Tasks:
     ✔ Arreglar botones de los horarios @done(21-09-22 12:29)
     ✔ Hacer que pasado el dia u hora, no deje pulsar los botones correspondientes @done(21-09-26 10:24)    
     ☐ Hacer que al cerrar el navegador, cierre la sesion.
-    ☐ Usar ajax para actualizacion en caso de tener dos o mas usuarios dentro de la pagina.
+    ☐ Usar ajax para actualizacion en caso de tener dos o mas usuarios dentro de la pagina. Actualmente hay un flash que muestra el error de reserva doble.
     ✔ He puesto cookies para obtener la reserva y enseñarlas en la pagina. Necesito poder obtener el valor del array de strings para poder mostrarla. @done(22-03-29 13:03)
     ✔ Ajustar login div. @done(22-03-29 14:04)
     ✔ Meter mas transiciones para el calendario y demas @done(22-04-21 13:19)
@@ -31,4 +31,6 @@ Tasks:
     ☐ Eliminar sitio no seguro. Necesita TLS para eliminarlo y cuesta dinero.
     ✔ Navbar esta fucked. No se colapsa cuando esta en movil. Ahora tengo dos dilemas. @done(22-04-26 13:37)
     ✔ El calendario funciona para moviles y desktops. Los botones tienen mal la posicion cuando la resolucion es mayor que 720. @done(22-04-30 17:54)
+    ✔ Al seleccionar el mismo dia dos usuarios, pone reserva correcta cuando deberia decirle a uno que no. Posible error de locks @done(22-05-05 13:19)
+
     

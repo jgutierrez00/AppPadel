@@ -164,12 +164,21 @@ document.getElementById('btnbacktt').addEventListener('click', function () {
   ], {
     duration: 600,
   });
-  document.getElementById('divttable1').animate([
-    {opacity: '100%'},
-    {opacity: '0%'}
-  ], {
-    duration: 600,
-  });
+  if(document.getElementById('divttable1').style.display == 'block'){
+    document.getElementById('divttable1').animate([
+      {opacity: '100%'},
+      {opacity: '0%'}
+    ], {
+      duration: 600,
+    });
+  }else{
+    document.getElementById('divttable2').animate([
+      {opacity: '100%'},
+      {opacity: '0%'}
+    ], {
+      duration: 600,
+    });
+  }
   setTimeout(showBack, 600);
 });
 
